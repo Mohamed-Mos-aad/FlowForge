@@ -1,8 +1,8 @@
-
 'use client';
-
-import { useState, useCallback } from 'react';
-
+// ** Hooks && Tools
+import { useCallback } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
+// ** React Flow
 import {
     ReactFlow,
     Background,
@@ -12,7 +12,6 @@ import {
     applyEdgeChanges,
     addEdge,
 } from '@xyflow/react';
-
 import type {
     Node,
     Edge,
@@ -20,32 +19,19 @@ import type {
     EdgeChange,
     Connection,
 } from '@xyflow/react';
-
 import '@xyflow/react/dist/style.css';
 import '../../app/workflows/flow.css';
+// ** Interfaces
+interface FlowProps{
+    nodes: Node[];
+    edges: Edge[];
+    setNodes: Dispatch<SetStateAction<Node[]>>;
+    setEdges: Dispatch<SetStateAction<Edge[]>>;
+}
 
-const initialNodes: Node[] = [
-    {
-        id: 'n1',
-        position: { x: 0, y: 0 },
-        data: { label: 'Node 1' },
-        className: 'custom-node',
-    },
-    {
-        id: 'n2',
-        position: { x: 0, y: 120 },
-        data: { label: 'Node 2' },
-        className: 'custom-node',
-    },
-];
 
-const initialEdges: Edge[] = [
-    { id: 'n1-n2', source: 'n1', target: 'n2' },
-];
 
-export default function Flow() {
-    const [nodes, setNodes] = useState<Node[]>(initialNodes);
-    const [edges, setEdges] = useState<Edge[]>(initialEdges);
+export default function Flow({nodes, edges, setNodes, setEdges}: FlowProps) {
 
     const onNodesChange = useCallback(
         (changes: NodeChange[]) =>
@@ -64,6 +50,8 @@ export default function Flow() {
             setEdges((eds) => addEdge(params, eds)),
         []
     );
+
+
 
     return (
         <div className="w-full h-full">

@@ -1,8 +1,59 @@
+'use client'
+// ** Components
 import Flow from "@/components/ui/Flow";
+// ** React Flow
+import type {Edge, Node} from "@xyflow/react";
+import {useState} from "react";
+// ** Constants
+const initialNodes: Node[] = [
+    {
+        id: 'n1',
+        position: { x: 0, y: 0 },
+        data: { label: 'Node 1' },
+        className: 'custom-node'
+    },
+    {
+        id: 'n2',
+        position: { x: 0, y: 120 },
+        data: { label: 'Node 2' },
+        className: 'custom-node'
+    },
+];
+
+const initialEdges: Edge[] = [
+    { id: 'n1-n2', source: 'n1', target: 'n2' },
+];
+
+
 
 export default function Home() {
+    // ** States
+    const [ nodes, setNodes ] = useState<Node[]>(initialNodes);
+    const [ edges, setEdges ] = useState<Edge[]>(initialEdges);
+
+
+
+    // ** Handlers
+    const addNodeHandler = ()=>{
+        setNodes(prev => [
+            ...prev,
+            {
+                id: `n${nodes.length + 1}`,
+                position: { x: 0, y: 120 * nodes.length },
+                data: { label: `Node ${nodes.length + 1}` },
+                className: 'custom-node'
+            }
+        ])
+        setEdges(prev => [
+            ...prev,
+            { id: `n${nodes.length}-n${nodes.length + 1}`, source: `n${nodes.length}`, target: `n${nodes.length + 1}` },
+        ])
+    }
+
+
+
     return (
-        <div className="w-full max-h-screen">
+        <div className="w-full h-screen">
             <header className="flex justify-between items-center bg-[#17191D] border-b border-[#2B2E35] px-3.5 py-2">
                 <h1 className="text-[#9197A2]">
                     Workflows / <span className="text-[#E3E5E8]">Customer Onboarding Pipeline</span>
@@ -32,7 +83,14 @@ export default function Home() {
                     </button>
                 </div>
             </header>
-            <Flow />
+            <div className="flex w-full h-screen">
+                <Flow nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges}/>
+                <div className="min-w-1/4 grid grid-cols-2 gap-8 bg-[#17191D] border-l border-[#2B2E35] text-[#E3E5E8] p-3.5">
+                    <div className="w-full h-fit border border-[#2B2E35] p-3 text-center rounded-lg cursor-pointer" onClick={addNodeHandler}>
+                        Node
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
