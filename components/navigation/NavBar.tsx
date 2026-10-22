@@ -1,9 +1,23 @@
+'use client'
 // ** Hooks && Tools
 import Link from "next/link";
+import {useState} from "react";
 
 
 
 export default function NavBar() {
+    // ** States
+    const [ activePage, setActivePage ] = useState('Workflows');
+
+
+
+    // ** Handlers
+    const activePageHandler = (id: string)=>{
+        setActivePage(id)
+    }
+
+
+
     return (
         <nav className="min-w-1/5 flex flex-col gap-3.5 bg-[#17191D] border-r border-[#2B2E35] p-4">
             <div className="flex items-center gap-2">
@@ -16,28 +30,28 @@ export default function NavBar() {
                 <h1 className="font-bold text-[#E3E5E8]">FlowForge</h1>
             </div>
             <ul className="flex flex-col gap-2 text-[#9197A2]">
-                <li>
+                <li className={`p-2 border-l-2 cursor-pointer ${activePage === 'Workflows' ? 'bg-[#1D2025] border-[#C7F568]' : 'border-transparent' }`} onClick={()=>{activePageHandler("Workflows")}}>
                     <Link href="/workflows">Workflows</Link>
                 </li>
-                <li>
+                <li className={`p-2 border-l-2 cursor-pointer ${activePage === 'Templates' ? 'bg-[#1D2025] border-[#C7F568]' : 'border-transparent' }`} onClick={()=>{activePageHandler("Templates")}}>
                     <Link href="/workflows">Templates</Link>
                 </li>
-                <li>
+                <li className={`p-2 border-l-2 cursor-pointer ${activePage === 'Connections' ? 'bg-[#1D2025] border-[#C7F568]' : 'border-transparent' }`} onClick={()=>{activePageHandler("Connections")}}>
                     <Link href="/workflows">Connections</Link>
                 </li>
-                <li>
+                <li className={`p-2 border-l-2 cursor-pointer ${activePage === 'OPERATE' ? 'bg-[#1D2025] border-[#C7F568]' : 'border-transparent' }`} onClick={()=>{activePageHandler("OPERATE")}}>
                     <Link href="/workflows">OPERATE</Link>
                 </li>
-                <li>
+                <li className={`p-2 border-l-2 cursor-pointer ${activePage === 'Overview' ? 'bg-[#1D2025] border-[#C7F568]' : 'border-transparent' }`} onClick={()=>{activePageHandler("Overview")}}>
                     <Link href="/workflows">Overview</Link>
                 </li>
-                <li>
+                <li className={`p-2 border-l-2 cursor-pointer ${activePage === 'Executions' ? 'bg-[#1D2025] border-[#C7F568]' : 'border-transparent' }`} onClick={()=>{activePageHandler("Executions")}}>
                     <Link href="/workflows">Executions</Link>
                 </li>
-                <li>
+                <li className={`p-2 border-l-2 cursor-pointer ${activePage === 'Activity' ? 'bg-[#1D2025] border-[#C7F568]' : 'border-transparent' }`} onClick={()=>{activePageHandler("Activity")}}>
                     <Link href="/workflows">Activity</Link>
                 </li>
-                <li>
+                <li className={`p-2 border-l-2 cursor-pointer ${activePage === 'Settings' ? 'bg-[#1D2025] border-[#C7F568]' : 'border-transparent' }`} onClick={()=>{activePageHandler("Settings")}}>
                     <Link href="/workflows">Settings</Link>
                 </li>
             </ul>
