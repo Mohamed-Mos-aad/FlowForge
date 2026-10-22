@@ -1,18 +1,15 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 // ** Components
 import NavBar from "@/components/navigation/NavBar";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const geistInter = Inter({
+  variable: "--font-geist-inter",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+
 
 export const metadata: Metadata = {
   title: "Flow Forge",
@@ -23,9 +20,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistInter.variable}  h-full antialiased`}
     >
-      <body className="min-w-full min-h-full flex">
+      <body className="min-w-full h-full flex">
         <NavBar />
         {children}
       </body>

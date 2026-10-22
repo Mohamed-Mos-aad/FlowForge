@@ -66,7 +66,7 @@ export default function Flow() {
     );
 
     return (
-        <div className="w-full h-screen">
+        <div className="w-full h-full">
             <ReactFlow
                 nodes={nodes}
                 edges={edges}
