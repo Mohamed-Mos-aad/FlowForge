@@ -1,9 +1,11 @@
 'use client'
-
+// ** Components
 import Flow from "@/components/ui/Flow";
+// ** React Flow
 import type {Edge, Node} from "@xyflow/react";
+// ** Hooks && Tools
 import {useState} from "react";
-
+// ** Constants
 const initialNodes: Node[] = [
     {
         id: 'n1',
@@ -18,16 +20,22 @@ const initialNodes: Node[] = [
         className: 'custom-node'
     },
 ];
-
 const initialEdges: Edge[] = [
     { id: 'n1-n2', source: 'n1', target: 'n2' },
 ];
 
+
+
 export default function Home() {
+    // ** States
     const [ nodes, setNodes ] = useState<Node[]>(initialNodes);
     const [ edges, setEdges ] = useState<Edge[]>(initialEdges);
-    const [ isNodePanelOpen, setIsNodePanelOpen ] = useState(false);
+    const [ isPanelOpen, setIsPanelOpen ] = useState(false);
+    const [ activeNode, setActiveNode ] = useState<Node| null>(null)
 
+
+
+    // ** Handlers
     const addNodeHandler = ()=>{
         const nextId = `n${nodes.length + 1}`;
         const previousId = nodes[nodes.length - 1]?.id;
@@ -53,8 +61,11 @@ export default function Home() {
             ]);
         }
 
-        setIsNodePanelOpen(false);
+        setIsPanelOpen(false);
     };
+
+
+
 
     return (
         <div className="relative flex flex-col w-full h-dvh overflow-hidden bg-[#17191D]">
@@ -96,19 +107,27 @@ export default function Home() {
 
             <div className="flex flex-1 min-h-0 w-full">
                 <div className="flex-1 min-w-0 min-h-0">
-                    <Flow nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges}/>
+                    <Flow nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} setActiveNode={setActiveNode} setIsPanelOpen={setIsPanelOpen}/>
                 </div>
-
-                <div className="hidden md:grid md:w-1/4 md:min-w-56 md:max-w-80 grid-cols-2 content-start gap-8 bg-[#17191D] border-l border-[#2B2E35] text-[#E3E5E8] p-3.5">
-                    <button className="w-full h-fit border border-[#2B2E35] p-3 text-center rounded-lg cursor-pointer hover:bg-[#22252B]" onClick={addNodeHandler}>
-                        Node
-                    </button>
-                </div>
+                {isPanelOpen && activeNode ? (
+                    <div className="hidden md:block w-1/4 min-w-56 max-w-80 bg-[#17191D] border-l border-[#2B2E35] text-[#E3E5E8] p-4">
+                        {activeNode.id}
+                    </div>
+                ) : (
+                    <div className="hidden md:grid md:w-1/4 md:min-w-56 md:max-w-80 grid-cols-2 content-start gap-8 bg-[#17191D] border-l border-[#2B2E35] text-[#E3E5E8] p-3.5">
+                        <button
+                            className="w-full h-fit border border-[#2B2E35] p-3 rounded-lg"
+                            onClick={addNodeHandler}
+                        >
+                            Node
+                        </button>
+                    </div>
+                )}
             </div>
 
             <button
                 className="md:hidden fixed bottom-5 right-5 z-40 flex items-center justify-center w-10 h-10 bg-[#C7F568] text-[#0F1113] rounded-full shadow-xl cursor-pointer"
-                onClick={() => setIsNodePanelOpen(true)}
+                onClick={() => setIsPanelOpen(true)}
                 aria-label="Add node"
             >
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -116,11 +135,14 @@ export default function Home() {
                 </svg>
             </button>
 
-            {isNodePanelOpen && (
+            {isPanelOpen && (
                 <div className="md:hidden fixed inset-0 z-50">
                     <div
                         className="absolute inset-0 bg-black/50"
-                        onClick={() => setIsNodePanelOpen(false)}
+                        onClick={() => {
+                            setActiveNode(null)
+                            setIsPanelOpen(false)
+                        }}
                     />
 
                     <div className="w-3/4 absolute top-0 right-0 flex flex-col w-[ min(85%,320px)] h-full bg-[#17191D] border-l border-[#2B2E35] text-[#E3E5E8] shadow-2xl">
@@ -128,7 +150,10 @@ export default function Home() {
 
                             <button
                                 className="flex items-center justify-center w-8 h-8 rounded-lg border border-[#2B2E35] text-[#9197A2] cursor-pointer"
-                                onClick={() => setIsNodePanelOpen(false)}
+                                onClick={() => {
+                                    setActiveNode(null)
+                                    setIsPanelOpen(false)
+                                }}
                                 aria-label="Close panel"
                             >
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -136,17 +161,23 @@ export default function Home() {
                                 </svg>
                             </button>
                         </div>
-
-                        <div className="grid grid-cols-2 gap-3 p-4">
-                            <button
-                                className="flex flex-col items-center justify-center gap-2 min-h-24 border border-[#2B2E35] rounded-xl hover:bg-[#22252B] cursor-pointer"
-                                onClick={addNodeHandler}
-                            >
-                                <span className="text-sm">
-                                    Node
-                                </span>
-                            </button>
-                        </div>
+                        {
+                            activeNode ?
+                                <div>
+                                    {activeNode.id}
+                                </div>
+                                :
+                                <div className="grid grid-cols-2 gap-3 p-4">
+                                    <button
+                                        className="flex flex-col items-center justify-center gap-2 min-h-24 border border-[#2B2E35] rounded-xl hover:bg-[#22252B] cursor-pointer"
+                                        onClick={addNodeHandler}
+                                    >
+                                        <span className="text-sm">
+                                            Node
+                                        </span>
+                                    </button>
+                                </div>
+                        }
                     </div>
                 </div>
             )}

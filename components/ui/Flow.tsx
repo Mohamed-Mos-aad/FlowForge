@@ -27,11 +27,13 @@ interface FlowProps{
     edges: Edge[];
     setNodes: Dispatch<SetStateAction<Node[]>>;
     setEdges: Dispatch<SetStateAction<Edge[]>>;
+    setActiveNode: (node: Node | null)=> void;
+    setIsPanelOpen: (state: boolean)=> void
 }
 
 
 
-export default function Flow({nodes, edges, setNodes, setEdges}: FlowProps) {
+export default function Flow({nodes, edges, setNodes, setEdges, setActiveNode, setIsPanelOpen}: FlowProps) {
 
     const onNodesChange = useCallback(
         (changes: NodeChange[]) =>
@@ -50,6 +52,23 @@ export default function Flow({nodes, edges, setNodes, setEdges}: FlowProps) {
             setEdges((eds) => addEdge(params, eds)),
         []
     );
+    const onNodeClick = useCallback(
+        (_event: React.MouseEvent, node: Node) => {
+            setActiveNode(node)
+        },
+        []
+    );
+    const onNodeDoubleClick = useCallback(
+        (_event: React.MouseEvent, node: Node) => {
+            setActiveNode(node);
+            setIsPanelOpen(true);
+        },
+        [setActiveNode, setIsPanelOpen]
+    );
+    const onPaneClick = useCallback(() => {
+        setActiveNode(null);
+        setIsPanelOpen(false);
+    }, [setActiveNode, setIsPanelOpen]);
 
 
 
@@ -61,6 +80,9 @@ export default function Flow({nodes, edges, setNodes, setEdges}: FlowProps) {
                 onNodesChange={onNodesChange}
                 onEdgesChange={onEdgesChange}
                 onConnect={onConnect}
+                onNodeClick={onNodeClick}
+                onNodeDoubleClick={onNodeDoubleClick}
+                onPaneClick={onPaneClick}
                 fitView
             >
                 <Background
