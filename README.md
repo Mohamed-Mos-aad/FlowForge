@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FlowForge — Visual Workflow Builder
 
-## Getting Started
+FlowForge is a visual workflow builder in progress. It is being developed as a focused front-end project around the core experience of creating and editing node-based workflows.
 
-First, run the development server:
+The current prototype provides an interactive canvas where you can add, move, select, and connect nodes. The longer-term goal is to grow it into a workflow automation product with validation, execution, and run inspection.
+
+## Current prototype
+
+- Interactive workflow canvas built with React Flow (`@xyflow/react`).
+- Add nodes from the side panel on desktop or the floating action button on mobile.
+- Drag nodes around the canvas and create connections between nodes.
+- Select a node to open its inspector panel.
+- Responsive editor layout with canvas controls and a dotted background.
+- A newly added node is connected to the previously added node.
+
+This is an early UI prototype. Workflow persistence, configurable node properties, validation, workflow execution, authentication, and execution history are planned and are not implemented yet.
+
+## Tech stack
+
+- [Next.js](https://nextjs.org/) 16 with the App Router
+- [React](https://react.dev/) 19
+- [TypeScript](https://www.typescriptlang.org/)
+- [React Flow](https://reactflow.dev/) (`@xyflow/react`)
+- [Tailwind CSS](https://tailwindcss.com/) 4
+- [Lucide](https://lucide.dev/) icons
+
+## Getting started
+
+### Requirements
+
+- Node.js compatible with the installed Next.js version
+- npm
+
+### Install dependencies
+
+```bash
+npm install
+```
+
+### Run the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000/workflows](http://localhost:3000/workflows) to view the workflow editor.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Available scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the local development server |
+| `npm run build` | Create a production build |
+| `npm run start` | Start the production server |
+| `npm run lint` | Run ESLint |
 
-## Learn More
+## Project structure
 
-To learn more about Next.js, take a look at the following resources:
+```text
+app/
+  workflows/       Workflow editor route and canvas styles
+  page.tsx         Home route
+components/
+  ui/Flow.tsx      React Flow canvas and interaction handlers
+  navigation/      Navigation components
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Product direction
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The project is intended to develop toward a compact workflow automation tool. The following are goals, not current features:
 
-## Deploy on Vercel
+1. **Workflow editor:** custom node types, richer editing controls, save and load, and undo/redo.
+2. **Node configuration:** typed settings and validation tailored to each node type.
+3. **Workflow validation:** detect incomplete or invalid workflows before a run.
+4. **Execution engine:** execute a supported set of node types, pass data between steps, and report success or failure.
+5. **Execution inspector and history:** inspect step inputs, outputs, errors, and durations, and review previous runs.
+6. **Persistence and product experience:** save workflows and provide the surrounding project experience.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The planned direction is to keep workflow rules and execution logic independent from the canvas UI as those capabilities are added.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Status
+
+FlowForge is under active development. The README describes the current prototype separately from the product direction so planned capabilities are not mistaken for implemented features.
