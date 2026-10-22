@@ -1,19 +1,47 @@
-'use client'
-// ** Hooks && Tools
+
+'use client';
+
 import { useState, useCallback } from 'react';
-// ** ReactFlow
-import { ReactFlow, applyNodeChanges, applyEdgeChanges, addEdge } from '@xyflow/react';
-import type { Node, Edge, NodeChange, EdgeChange, Connection } from '@xyflow/react';
+
+import {
+    ReactFlow,
+    Background,
+    BackgroundVariant,
+    Controls,
+    applyNodeChanges,
+    applyEdgeChanges,
+    addEdge,
+} from '@xyflow/react';
+
+import type {
+    Node,
+    Edge,
+    NodeChange,
+    EdgeChange,
+    Connection,
+} from '@xyflow/react';
+
 import '@xyflow/react/dist/style.css';
-// ** Nodes
-const initialNodes = [
-    { id: 'n1', position: { x: 0, y: 0 }, data: { label: 'Node 1' } },
-    { id: 'n2', position: { x: 0, y: 100 }, data: { label: 'Node 2' } },
+import '../../app/workflows/flow.css';
+
+const initialNodes: Node[] = [
+    {
+        id: 'n1',
+        position: { x: 0, y: 0 },
+        data: { label: 'Node 1' },
+        className: 'custom-node',
+    },
+    {
+        id: 'n2',
+        position: { x: 0, y: 120 },
+        data: { label: 'Node 2' },
+        className: 'custom-node',
+    },
 ];
-// ** Edges
-const initialEdges = [{ id: 'n1-n2', source: 'n1', target: 'n2' }];
 
-
+const initialEdges: Edge[] = [
+    { id: 'n1-n2', source: 'n1', target: 'n2' },
+];
 
 export default function Flow() {
     const [nodes, setNodes] = useState<Node[]>(initialNodes);
@@ -21,32 +49,24 @@ export default function Flow() {
 
     const onNodesChange = useCallback(
         (changes: NodeChange[]) =>
-            setNodes((nodesSnapshot) =>
-                applyNodeChanges(changes, nodesSnapshot)
-            ),
+            setNodes((nds) => applyNodeChanges(changes, nds)),
         []
     );
 
     const onEdgesChange = useCallback(
         (changes: EdgeChange[]) =>
-            setEdges((edgesSnapshot) =>
-                applyEdgeChanges(changes, edgesSnapshot)
-            ),
+            setEdges((eds) => applyEdgeChanges(changes, eds)),
         []
     );
 
     const onConnect = useCallback(
         (params: Connection) =>
-            setEdges((edgesSnapshot) =>
-                addEdge(params, edgesSnapshot)
-            ),
+            setEdges((eds) => addEdge(params, eds)),
         []
     );
 
-
-
     return (
-        <div style={{ width: '100vw', height: '100vh' }}>
+        <div className="w-full h-screen">
             <ReactFlow
                 nodes={nodes}
                 edges={edges}
@@ -54,7 +74,16 @@ export default function Flow() {
                 onEdgesChange={onEdgesChange}
                 onConnect={onConnect}
                 fitView
-            />
+            >
+                <Background
+                    variant={BackgroundVariant.Dots}
+                    gap={20}
+                    size={1}
+                    color="#9197A2"
+                />
+
+                <Controls />
+            </ReactFlow>
         </div>
     );
 }

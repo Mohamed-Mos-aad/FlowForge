@@ -1,0 +1,28 @@
+
+/* خلفية مساحة الرسم */
+.react-flow {
+    background: #0F1113;
+}
+
+/* توحيد شكل جميع الـ Nodes */
+.react-flow__node.custom-node {
+    background: #17191D;
+    border: 1px solid #cbd5e1;
+    border-radius: 5px;
+    padding: 16px 12px;
+    min-width: 140px;
+    color: #E3E5E8;
+    font-size: 12px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* عند تحديد الـ Node */
+.react-flow__node.custom-node.selected {
+    border-color: #C7F568;
+    box-shadow: 0 0 0 3px rgba(199 245 43 / 20%);
+}
+
+/* شكل نقاط الخلفية */
+.react-flow__background {
+    background-color: #0F1113;
+}
