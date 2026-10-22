@@ -1,9 +1,7 @@
-
 'use client'
 // ** Hooks && Tools
 import Link from "next/link";
 import { useState } from "react";
-
 export default function NavBar() {
     // ** States
     const [ activePage, setActivePage ] = useState('Workflows');
@@ -14,6 +12,8 @@ export default function NavBar() {
         setActivePage(id);
         setIsOpen(false);
     }
+
+
 
     return (
         <>

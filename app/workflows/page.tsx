@@ -136,51 +136,54 @@ export default function Home() {
             </button>
 
             {isPanelOpen && (
-                <div className="md:hidden fixed inset-0 z-50">
-                    <div
-                        className="absolute inset-0 bg-black/50"
+                <div
+                    className="md:hidden fixed inset-0 z-40 bg-black/50"
+                    onClick={() => {
+                        setActiveNode(null)
+                        setIsPanelOpen(false)
+                    }}
+                />
+            )}
+
+            <div className={`
+                md:hidden fixed top-0 right-0 z-50 flex flex-col
+                w-3/4 w-[ min(85%,320px)] h-full bg-[#17191D] border-l border-[#2B2E35] text-[#E3E5E8]
+                transform transition-transform duration-300 ease-in-out
+                ${isPanelOpen ? 'translate-x-0 shadow-2xl' : 'translate-x-full'}
+            `}>
+                <div className="flex items-center justify-between p-4 border-b border-[#2B2E35]">
+
+                    <button
+                        className="flex items-center justify-center w-8 h-8 rounded-lg border border-[#2B2E35] text-[#9197A2] cursor-pointer"
                         onClick={() => {
                             setActiveNode(null)
                             setIsPanelOpen(false)
                         }}
-                    />
-
-                    <div className="w-3/4 absolute top-0 right-0 flex flex-col w-[ min(85%,320px)] h-full bg-[#17191D] border-l border-[#2B2E35] text-[#E3E5E8] shadow-2xl">
-                        <div className="flex items-center justify-between p-4 border-b border-[#2B2E35]">
-
+                        aria-label="Close panel"
+                    >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+                {
+                    activeNode ?
+                        <div>
+                            {activeNode.id}
+                        </div>
+                        :
+                        <div className="grid grid-cols-2 gap-3 p-4">
                             <button
-                                className="flex items-center justify-center w-8 h-8 rounded-lg border border-[#2B2E35] text-[#9197A2] cursor-pointer"
-                                onClick={() => {
-                                    setActiveNode(null)
-                                    setIsPanelOpen(false)
-                                }}
-                                aria-label="Close panel"
+                                className="flex flex-col items-center justify-center gap-2 min-h-24 border border-[#2B2E35] rounded-xl hover:bg-[#22252B] cursor-pointer"
+                                onClick={addNodeHandler}
                             >
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                                </svg>
+                                <span className="text-sm">
+                                    Node
+                                </span>
                             </button>
                         </div>
-                        {
-                            activeNode ?
-                                <div>
-                                    {activeNode.id}
-                                </div>
-                                :
-                                <div className="grid grid-cols-2 gap-3 p-4">
-                                    <button
-                                        className="flex flex-col items-center justify-center gap-2 min-h-24 border border-[#2B2E35] rounded-xl hover:bg-[#22252B] cursor-pointer"
-                                        onClick={addNodeHandler}
-                                    >
-                                        <span className="text-sm">
-                                            Node
-                                        </span>
-                                    </button>
-                                </div>
-                        }
-                    </div>
-                </div>
-            )}
+                }
+            </div>
         </div>
     );
 }
