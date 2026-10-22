@@ -3,6 +3,7 @@
 import { useState, useCallback } from 'react';
 // ** ReactFlow
 import { ReactFlow, applyNodeChanges, applyEdgeChanges, addEdge } from '@xyflow/react';
+import type { Node, Edge, NodeChange, EdgeChange, Connection } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 // ** Nodes
 const initialNodes = [
@@ -15,12 +16,34 @@ const initialEdges = [{ id: 'n1-n2', source: 'n1', target: 'n2' }];
 
 
 export default function Flow() {
-    const [nodes, setNodes] = useState(initialNodes);
-    const [edges, setEdges] = useState(initialEdges);
+    const [nodes, setNodes] = useState<Node[]>(initialNodes);
+    const [edges, setEdges] = useState<Edge[]>(initialEdges);
 
-    const onNodesChange = useCallback((changes) => setNodes((nodesSnapshot) => applyNodeChanges(changes, nodesSnapshot)), []);
-    const onEdgesChange = useCallback((changes) => setEdges((edgesSnapshot) => applyEdgeChanges(changes, edgesSnapshot)), []);
-    const onConnect = useCallback((params) => setEdges((edgesSnapshot) => addEdge(params, edgesSnapshot)), []);
+    const onNodesChange = useCallback(
+        (changes: NodeChange[]) =>
+            setNodes((nodesSnapshot) =>
+                applyNodeChanges(changes, nodesSnapshot)
+            ),
+        []
+    );
+
+    const onEdgesChange = useCallback(
+        (changes: EdgeChange[]) =>
+            setEdges((edgesSnapshot) =>
+                applyEdgeChanges(changes, edgesSnapshot)
+            ),
+        []
+    );
+
+    const onConnect = useCallback(
+        (params: Connection) =>
+            setEdges((edgesSnapshot) =>
+                addEdge(params, edgesSnapshot)
+            ),
+        []
+    );
+
+
 
     return (
         <div style={{ width: '100vw', height: '100vh' }}>
