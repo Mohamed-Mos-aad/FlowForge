@@ -111,7 +111,7 @@ export default function Home() {
                     <Flow nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} setActiveNode={setActiveNode} setIsPanelOpen={setIsPanelOpen}/>
                 </div>
                 {isPanelOpen && activeNode ? (
-                    <div className="hidden md:block w-1/4 min-w-56 max-w-80 bg-[#17191D] border-l border-[#2B2E35] text-[#E3E5E8] p-4">
+                    <div className="hidden md:block w-1/4 min-w-56 max-w-80 bg-[#17191D] border-l border-[#2B2E35] text-[#E3E5E8]">
                         <NodeForm />
                     </div>
                 ) : (
@@ -169,9 +169,7 @@ export default function Home() {
                 </div>
                 {
                     activeNode ?
-                        <div>
-                            <NodeForm />
-                        </div>
+                        <NodeForm />
                         :
                         <div className="grid grid-cols-2 gap-3 p-4">
                             <button

@@ -74,7 +74,7 @@ export default function NavBar() {
                     </button>
                 </div>
 
-                <ul className="flex flex-col gap-2 text-[#9197A2]">
+                <ul className="flex flex-col gap-2 text-[13px] text-[#9197A2]">
                     <li className={`p-2 border-l-2 cursor-pointer ${activePage === 'Workflows' ? 'bg-[#1D2025] border-[#C7F568]' : 'border-transparent'}`} onClick={()=>activePageHandler("Workflows")}>
                         <Link href="/workflows">Workflows</Link>
                     </li>
