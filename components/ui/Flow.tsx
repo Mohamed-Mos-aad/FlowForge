@@ -1,7 +1,7 @@
 'use client';
 // ** Hooks && Tools
-import { useCallback } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import {useCallback} from 'react';
+import type {Dispatch, SetStateAction, MouseEvent} from 'react';
 // ** React Flow
 import {
     ReactFlow,
@@ -22,44 +22,58 @@ import type {
 import '@xyflow/react/dist/style.css';
 import '../../app/workflows/flow.css';
 // ** Interfaces
-interface FlowProps{
-    nodes: Node[];
+import type {NodeData} from "@/app/types/node";
+interface FlowProps {
+    nodes: Node<NodeData>[];
     edges: Edge[];
-    setNodes: Dispatch<SetStateAction<Node[]>>;
+    setNodes: Dispatch<SetStateAction<Node<NodeData>[]>>;
     setEdges: Dispatch<SetStateAction<Edge[]>>;
-    setActiveNode: (node: Node | null)=> void;
-    setIsPanelOpen: (state: boolean)=> void
+    setActiveNode: Dispatch<SetStateAction<Node<NodeData> | null>>;
+    setIsPanelOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 
 
-export default function Flow({nodes, edges, setNodes, setEdges, setActiveNode, setIsPanelOpen}: FlowProps) {
+export default function Flow({
+                                 nodes,
+                                 edges,
+                                 setNodes,
+                                 setEdges,
+                                 setActiveNode,
+                                 setIsPanelOpen
+                             }: FlowProps) {
 
+
+
+    // ** Handlers
     const onNodesChange = useCallback(
-        (changes: NodeChange[]) =>
-            setNodes((nds) => applyNodeChanges(changes, nds)),
-        []
+        (changes: NodeChange<Node<NodeData>>[]) => {
+            setNodes(nds =>
+                applyNodeChanges<Node<NodeData>>(changes, nds)
+            );
+        },
+        [setNodes]
     );
-
     const onEdgesChange = useCallback(
-        (changes: EdgeChange[]) =>
-            setEdges((eds) => applyEdgeChanges(changes, eds)),
-        []
+        (changes: EdgeChange[]) => {
+            setEdges(eds => applyEdgeChanges(changes, eds));
+        },
+        [setEdges]
     );
-
     const onConnect = useCallback(
-        (params: Connection) =>
-            setEdges((eds) => addEdge(params, eds)),
-        []
+        (params: Connection) => {
+            setEdges(eds => addEdge(params, eds));
+        },
+        [setEdges]
     );
     const onNodeClick = useCallback(
-        (_event: React.MouseEvent, node: Node) => {
-            setActiveNode(node)
+        (_event: MouseEvent, node: Node<NodeData>) => {
+            setActiveNode(node);
         },
-        []
+        [setActiveNode]
     );
     const onNodeDoubleClick = useCallback(
-        (_event: React.MouseEvent, node: Node) => {
+        (_event: MouseEvent, node: Node<NodeData>) => {
             setActiveNode(node);
             setIsPanelOpen(true);
         },
@@ -72,9 +86,10 @@ export default function Flow({nodes, edges, setNodes, setEdges, setActiveNode, s
 
 
 
+
     return (
         <div className="w-full h-full">
-            <ReactFlow
+            <ReactFlow<Node<NodeData>, Edge>
                 nodes={nodes}
                 edges={edges}
                 onNodesChange={onNodesChange}
