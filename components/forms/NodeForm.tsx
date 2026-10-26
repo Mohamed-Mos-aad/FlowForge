@@ -14,7 +14,7 @@ export default function NodeForm({node, onChange}: NodeFormProps) {
     // ** Data
     const request = node.data.request ?? {};
     const headers: Partial<RequestHeaders> = request.headers ?? {};
-    const state = node.data.state;
+    const status = node.data.status;
 
 
 
@@ -76,10 +76,10 @@ export default function NodeForm({node, onChange}: NodeFormProps) {
                     className="w-full resize-none text-[13px] text-[#9197A2] focus:outline-0"
                 />
 
-                {state && (
-                    <div className={`flex items-center gap-2 text-[11px] ${state.success ? "text-[#6BC18F]" : "text-[#EF7B63]"}`}>
-                        <span className={`w-2 h-2 flex ${state.success ? "bg-[#6BC18F]" : "bg-[#EF7B63]"} rounded-full`}></span>
-                        {state.success ? "Success" : "Failed"} · {state.ms}ms
+                {status && (
+                    <div className={`flex items-center gap-2 text-[11px] ${status.success ? "text-[#6BC18F]" : "text-[#EF7B63]"}`}>
+                        <span className={`w-2 h-2 flex ${status.success ? "bg-[#6BC18F]" : "bg-[#EF7B63]"} rounded-full`}></span>
+                        {status.success ? "Success" : "Failed"} · {status.ms}ms
                     </div>
                 )}
             </div>
