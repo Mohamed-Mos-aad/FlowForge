@@ -18,6 +18,29 @@
 }
 
 
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #2B2E35 #17191D;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #17191D;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #2B2E35;
+    border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #C7F568;
+}
+
 
 @theme inline {
   --color-background: var(--background);
