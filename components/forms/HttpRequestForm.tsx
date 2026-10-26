@@ -1,4 +1,3 @@
-
 // ** React Flow
 import type {Node} from "@xyflow/react";
 // ** Interfaces
@@ -10,7 +9,8 @@ interface NodeFormProps {
 
 
 
-export default function NodeForm({node, onChange}: NodeFormProps) {
+
+export default function HttpRequestForm({node, onChange}: NodeFormProps) {
     // ** Data
     const request = node.data.request ?? {};
     const headers: Partial<RequestHeaders> = request.headers ?? {};
@@ -38,8 +38,7 @@ export default function NodeForm({node, onChange}: NodeFormProps) {
             request: {
                 ...request,
                 headers: {
-                    accept: headers.accept ?? "",
-                    requestId: headers.requestId ?? "",
+                    ...headers,
                     [key]: value,
                 },
             },
@@ -132,7 +131,7 @@ export default function NodeForm({node, onChange}: NodeFormProps) {
             </div>
 
             <div className="flex flex-col gap-3.5 border-b border-[#2B2E35] p-3.5">
-                <h2 className="text-[11px] text-[#9197A2]">Headers · 2</h2>
+                <h2 className="text-[11px] text-[#9197A2]">Headers & Body</h2>
 
                 <div className="flex flex-col gap-1.5">
                     <div className="flex flex-col gap-1">
@@ -162,6 +161,18 @@ export default function NodeForm({node, onChange}: NodeFormProps) {
                             className="bg-[#0F1113] border border-[#2B2E35] rounded-[3px] px-2.5 py-1.5 text-[11px] text-[#E3E5E8] focus:outline-0 focus:border-[#C7F568]"
                         />
                     </div>
+                </div>
+                <div className="flex flex-col gap-1.25">
+                    <label htmlFor="body" className="text-[11px] text-[#9197A2]">Request Body (JSON)</label>
+                    <textarea
+                        name="body"
+                        id="body"
+                        rows={3}
+                        value={request.body ?? ""}
+                        onChange={e => updateRequestHandler("body", e.target.value)}
+                        placeholder='{"key": "value"}'
+                        className="w-full bg-[#0F1113] border border-[#2B2E35] rounded-[3px] p-2.5 text-[11px] text-[#E3E5E8] focus:outline-0 focus:border-[#C7F568] font-mono resize-none"
+                    />
                 </div>
 
                 <div className="w-full flex gap-2.5">
@@ -215,7 +226,7 @@ export default function NodeForm({node, onChange}: NodeFormProps) {
                     onClick={() => {
                         console.log("Test request:", node.data);
                     }}
-                    className="w-full border border-[#2B2E35] rounded-lg p-2 mt-1.5 cursor-pointer hover:bg-[#22252B]"
+                    className="w-full border border-[#2B2E35] rounded-lg p-2 mt-1.5 cursor-pointer hover:bg-[#22252B] text-[11px] text-[#E3E5E8]"
                 >
                     Test request
                 </button>
