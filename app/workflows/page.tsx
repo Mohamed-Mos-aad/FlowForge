@@ -144,7 +144,8 @@ export default function Home() {
             </header>
 
             <div className="flex flex-1 min-h-0 w-full">
-                <div className="flex-1 min-w-0 min-h-0">
+                <div className="flex-1 min-w-0 min-h-0 relative">
+                    <h3 className="absolute top-3.5 left-3.5 z-200 text-[10px] text-[#9197A2]">Test Onboarding · {nodes.length} nodes · {edges.length} edges</h3>
                     <Flow nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} setActiveNode={setActiveNode} setIsPanelOpen={setIsPanelOpen}/>
                 </div>
                 {isPanelOpen && activeNode ? (
