@@ -18,7 +18,7 @@ export default function ActionForm({node, onChange}: NodeFormProps) {
 
 
     // ** Handlers
-    const updateActionHandler = (key: string, value: any) => {
+    const updateActionHandler = (key: string, value: string) => {
         onChange(node.id, {
             action: {
                 ...action,

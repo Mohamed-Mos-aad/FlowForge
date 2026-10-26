@@ -17,7 +17,7 @@ export default function WebhookForm({node, onChange}: NodeFormProps) {
 
 
     // ** Handlers
-    const updateWebhookHandler = (key: string, value: any) => {
+    const updateWebhookHandler = (key: string, value: string) => {
         onChange(node.id, {
             webhook: {
                 ...webhook,
@@ -76,8 +76,7 @@ export default function WebhookForm({node, onChange}: NodeFormProps) {
                         type="text"
                         name="endpointUrl"
                         id="endpointUrl"
-                        readOnly
-                        value={webhook.url ?? "https://api.yoursite.com/webhook/v1/..."}
+                        value={webhook.url}
                         className="bg-[#0F1113] border border-[#2B2E35] rounded-[3px] px-2.5 py-1.5 text-[11px] text-[#9197A2] focus:outline-0 select-all"
                     />
                 </div>

@@ -17,7 +17,7 @@ export default function ConditionForm({node, onChange}: NodeFormProps) {
 
 
     // ** Handlers
-    const updateConditionHandler = (key: string, value: any) => {
+    const updateConditionHandler = (key: string, value: string) => {
         onChange(node.id, {
             condition: {
                 ...condition,

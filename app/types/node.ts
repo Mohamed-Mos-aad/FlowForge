@@ -1,6 +1,18 @@
-export interface RequestHeaders {
-    accept: string;
-    requestId: string;
+export interface NodeWebhook {
+    method: string;
+    url: string;
+    secret: string;
+}
+
+export interface NodeAction {
+    type: string;
+    payload: string;
+}
+
+export interface NodeCondition {
+    leftValue: string;
+    operator: string;
+    rightValue: string;
 }
 
 export interface NodeRequest {
@@ -8,8 +20,14 @@ export interface NodeRequest {
     url: string;
     authentication: string;
     headers: RequestHeaders;
+    body: string;
     timeout: number | "";
     retries: number | "";
+}
+
+export interface RequestHeaders {
+    accept?: string;
+    requestId?: string;
 }
 
 export interface NodeState {
@@ -22,6 +40,9 @@ export interface NodeData extends Record<string, unknown> {
     description?: string;
     category: string;
     status?: NodeState;
-    request?: Partial<NodeRequest>;
     errorMsg?: string;
+    request?: Partial<NodeRequest>;
+    webhook? : Partial<NodeWebhook>;
+    action? : Partial<NodeAction>;
+    condition? : Partial<NodeCondition>;
 }
