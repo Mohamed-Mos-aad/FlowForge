@@ -31,7 +31,12 @@ interface FlowProps {
     setActiveNode: Dispatch<SetStateAction<Node<NodeData> | null>>;
     setIsPanelOpen: Dispatch<SetStateAction<boolean>>;
 }
-
+// ** Components
+import CustomNode from "@/components/workflow/CustomNode";
+// ** Constants
+const nodeTypes = {
+    custom: CustomNode,
+};
 
 
 export default function Flow({
@@ -98,6 +103,7 @@ export default function Flow({
                 onNodeClick={onNodeClick}
                 onNodeDoubleClick={onNodeDoubleClick}
                 onPaneClick={onPaneClick}
+                nodeTypes={nodeTypes}
                 fitView
             >
                 <Background

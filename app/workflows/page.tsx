@@ -24,9 +24,8 @@ export default function Home() {
 
 
     // ** Handlers
-    const addNodeHandler = ()=>{
+    const addNodeHandler = (type: "Webhook" | "Action" | "Condition" | "HTTP Request")=>{
         const nextId = `n${nodes.length + 1}`;
-        const previousId = nodes[nodes.length - 1]?.id;
         const lastNode = nodes[nodes.length - 1];
         const nextXPosition = lastNode
             ? lastNode.position.x
@@ -41,13 +40,15 @@ export default function Home() {
             {
                 id: nextId,
                 position: { x: nextXPosition, y: nextYPosition},
+                type: "custom",
                 data: {
                     label: `Node ${prev.length + 1}`,
                     description: "",
-                    state: {
+                    status: {
                         success: true,
                         ms: 0,
                     },
+                    category: type,
                     request: {
                         type: "GET",
                         url: "",
@@ -64,17 +65,6 @@ export default function Home() {
                 className: 'custom-node'
             }
         ]);
-
-        if (previousId) {
-            setEdges(prev => [
-                ...prev,
-                {
-                    id: `${previousId}-${nextId}`,
-                    source: previousId,
-                    target: nextId
-                }
-            ]);
-        }
 
         setIsPanelOpen(false);
     };
@@ -154,16 +144,34 @@ export default function Home() {
                     <Flow nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} setActiveNode={setActiveNode} setIsPanelOpen={setIsPanelOpen}/>
                 </div>
                 {isPanelOpen && activeNode ? (
-                    <div className="hidden xl:block w-1/4 min-w-56 max-w-80 bg-[#17191D] border-l border-[#2B2E35] text-[#E3E5E8]">
+                    <div className="hidden xl:block min-w-1/4 max-w-80 bg-[#17191D] border-l border-[#2B2E35] text-[#E3E5E8]">
                         <NodeForm node={activeNode} onChange={updateNodeHandler}/>
                     </div>
                 ) : (
-                    <div className="hidden xl:grid xl:w-1/4 xl:min-w-56 xl:max-w-80 grid-cols-2 content-start gap-8 bg-[#17191D] border-l border-[#2B2E35] text-[#E3E5E8] p-3.5">
+                    <div className="hidden xl:grid xl:min-w-1/4 xl:min-w-56 xl:max-w-80 grid-cols-2 content-start gap-8 bg-[#17191D] border-l border-[#2B2E35] text-[#E3E5E8] p-3.5">
                         <button
-                            className="w-full h-fit border border-[#2B2E35] p-3 rounded-lg cursor-pointer"
-                            onClick={addNodeHandler}
+                            className="w-full h-fit border border-[#2B2E35] p-3 rounded-lg cursor-pointer text-nowrap"
+                            onClick={()=>{addNodeHandler("Webhook")}}
                         >
-                            Node
+                            Webhook
+                        </button>
+                        <button
+                            className="w-full h-fit border border-[#2B2E35] p-3 rounded-lg cursor-pointer text-nowrap"
+                            onClick={()=>{addNodeHandler("Action")}}
+                        >
+                            Action
+                        </button>
+                        <button
+                            className="w-full h-fit border border-[#2B2E35] p-3 rounded-lg cursor-pointer text-nowrap"
+                            onClick={()=>{addNodeHandler("Condition")}}
+                        >
+                            Condition
+                        </button>
+                        <button
+                            className="w-full h-fit border border-[#2B2E35] p-3 rounded-lg cursor-pointer text-nowrap"
+                            onClick={()=>{addNodeHandler("HTTP Request")}}
+                        >
+                            HTTP Request
                         </button>
                     </div>
                 )}
@@ -216,12 +224,28 @@ export default function Home() {
                         :
                         <div className="grid grid-cols-2 gap-3 p-4">
                             <button
-                                className="flex flex-col items-center justify-center gap-2 min-h-24 border border-[#2B2E35] rounded-xl hover:bg-[#22252B] cursor-pointer"
-                                onClick={addNodeHandler}
+                                className="flex flex-col items-center justify-center gap-2 min-h-24 border border-[#2B2E35] rounded-xl hover:bg-[#22252B] text-sm cursor-pointer"
+                                onClick={()=>{addNodeHandler("Webhook")}}
                             >
-                                <span className="text-sm">
-                                    Node
-                                </span>
+                                Webhook
+                            </button>
+                            <button
+                                className="flex flex-col items-center justify-center gap-2 min-h-24 border border-[#2B2E35] rounded-xl hover:bg-[#22252B] text-sm cursor-pointer"
+                                onClick={()=>{addNodeHandler("Action")}}
+                            >
+                                Action
+                            </button>
+                            <button
+                                className="flex flex-col items-center justify-center gap-2 min-h-24 border border-[#2B2E35] rounded-xl hover:bg-[#22252B] text-sm cursor-pointer"
+                                onClick={()=>{addNodeHandler("Condition")}}
+                            >
+                                Condition
+                            </button>
+                            <button
+                                className="flex flex-col items-center justify-center gap-2 min-h-24 border border-[#2B2E35] rounded-xl hover:bg-[#22252B] text-sm cursor-pointer"
+                                onClick={()=>{addNodeHandler("HTTP Request")}}
+                            >
+                                HTTP Request
                             </button>
                         </div>
                 }

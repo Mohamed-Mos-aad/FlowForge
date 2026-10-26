@@ -20,7 +20,8 @@ export interface NodeState {
 export interface NodeData extends Record<string, unknown> {
     label: string;
     description?: string;
-    state?: NodeState;
+    category: string;
+    status?: NodeState;
     request?: Partial<NodeRequest>;
     errorMsg?: string;
 }
