@@ -17,7 +17,7 @@ export default function CustomNode({
                                        data,
                                    }: NodeProps<WorkflowNodeType>) {
     return (
-        <div className="max-w-34">
+        <div className="w-34 max-w-34">
             <Handle
                 type="target"
                 position={Position.Left}
