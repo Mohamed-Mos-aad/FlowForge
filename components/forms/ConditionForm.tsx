@@ -60,7 +60,7 @@ export default function ConditionForm({node, nodes, edges, onChange, setExecutio
         }
         const failed = items.length - passed;
 
-        onChange(node.id, { status: { success: passed > 0, ms: 0 } });
+        onChange(node.id, { status: { success: passed > 0, ms: 0 }, output: items });
         setExecutionLogs({
             time: new Date().toLocaleTimeString(),
             success: passed > 0,

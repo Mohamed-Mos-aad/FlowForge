@@ -5,8 +5,10 @@ export interface NodeWebhook {
 }
 
 export interface NodeAction {
-    type: string;
-    payload: string;
+    type: "notification" | "email";
+    message?: string;
+    to?: string;
+    subject?: string;
 }
 
 export interface NodeCondition {

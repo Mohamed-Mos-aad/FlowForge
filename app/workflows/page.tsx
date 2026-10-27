@@ -173,7 +173,7 @@ export default function Home() {
                             : activeNode?.data.category === "Condition" ?
                             <ConditionForm node={activeNode} onChange={updateNodeHandler} setExecutionLogs={addExecutionLogsHandler} nodes={nodes} edges={edges}/>
                             : activeNode?.data.category === "Action" &&
-                            <ActionForm node={activeNode} onChange={updateNodeHandler}/>
+                            <ActionForm node={activeNode} nodes={nodes} edges={edges} onChange={updateNodeHandler} setExecutionLogs={addExecutionLogsHandler}/>
                         }
                     </div>
                 ) : (
@@ -288,7 +288,7 @@ export default function Home() {
                     : activeNode?.data.category === "Condition" ?
                     <ConditionForm node={activeNode} onChange={updateNodeHandler} setExecutionLogs={addExecutionLogsHandler} nodes={nodes} edges={edges}/>
                     : activeNode?.data.category === "Action" ?
-                    <ActionForm node={activeNode} onChange={updateNodeHandler}/>
+                    <ActionForm node={activeNode} nodes={nodes} edges={edges} onChange={updateNodeHandler} setExecutionLogs={addExecutionLogsHandler}/>
                     :
                     <div className="grid grid-cols-2 gap-3 p-4">
                         <button
