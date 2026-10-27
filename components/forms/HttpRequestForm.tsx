@@ -2,15 +2,17 @@
 import type {Node} from "@xyflow/react";
 // ** Interfaces
 import {NodeData, NodeRequest, RequestHeaders} from "@/app/types/node";
+import {logProps} from "@/app/types/types";
 interface NodeFormProps {
     node: Node<NodeData>;
     onChange: (id: string, data: Partial<NodeData>) => void;
+    setExecutionLogs: (log: logProps)=> void
 }
 
 
 
 
-export default function HttpRequestForm({node, onChange}: NodeFormProps) {
+export default function HttpRequestForm({node, onChange, setExecutionLogs}: NodeFormProps) {
     // ** Data
     const request = node.data.request ?? {};
     const headers: Partial<RequestHeaders> = request.headers ?? {};
@@ -53,7 +55,12 @@ export default function HttpRequestForm({node, onChange}: NodeFormProps) {
             });
         }
         const data = await res.json()
-        console.log(data)
+        setExecutionLogs({
+            time: new Date().toLocaleTimeString(),
+            success: true,
+            title: node.data.label,
+            message: data.toString()
+        })
     }
 
 

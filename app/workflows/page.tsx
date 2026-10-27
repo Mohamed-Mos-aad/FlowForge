@@ -6,12 +6,14 @@ import HttpRequestForm from "@/components/forms/HttpRequestForm";
 import WebhookForm from "@/components/forms/WebhookForm";
 import ConditionForm from "@/components/forms/ConditionForm";
 import ActionForm from "@/components/forms/ActionForm";
+import ExecutionLog from "@/components/workflow/ExecutionLog";
 // ** React Flow
 import type {Edge, Node} from "@xyflow/react";
 // ** Hooks && Tools
 import {useState} from "react";
 // ** Interfaces
 import {NodeData} from "@/app/types/node";
+import {logProps} from "@/app/types/types";
 // ** Constants
 const initialNodes: Node<NodeData>[] = [];
 const initialEdges: Edge[] = [];
@@ -21,11 +23,11 @@ const path = crypto.randomUUID();
 
 export default function Home() {
     // ** States
-    const [nodes, setNodes] = useState<Node<NodeData>[]>(initialNodes);
+    const [ nodes, setNodes] = useState<Node<NodeData>[]>(initialNodes);
     const [ edges, setEdges ] = useState<Edge[]>(initialEdges);
     const [ isPanelOpen, setIsPanelOpen ] = useState(false);
-    const [activeNode, setActiveNode] = useState<Node<NodeData> | null>(null);
-
+    const [ activeNode, setActiveNode] = useState<Node<NodeData> | null>(null);
+    const [ executionLogs, setExecutionLogs] = useState<logProps[]>([])
 
 
     // ** Handlers
@@ -107,7 +109,12 @@ export default function Home() {
                 : prev
         );
     };
-
+    const addExecutionLogsHandler = (log:logProps)=>{
+        setExecutionLogs(prev => [
+            ...prev,
+            log
+        ])
+    }
 
 
     return (
@@ -152,6 +159,7 @@ export default function Home() {
                 <div className="flex-1 min-w-0 min-h-0 relative">
                     <h3 className="absolute top-3.5 left-3.5 z-1 text-[10px] text-[#9197A2]">Test Onboarding · {nodes.length} nodes · {edges.length} edges</h3>
                     <Flow nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} setActiveNode={setActiveNode} setIsPanelOpen={setIsPanelOpen}/>
+                    <ExecutionLog logs={executionLogs}/>
                 </div>
                 {isPanelOpen && activeNode ? (
                     <div className="hidden xl:block min-w-1/4 max-w-80 bg-[#17191D] border-l border-[#2B2E35] text-[#E3E5E8]">
@@ -159,7 +167,7 @@ export default function Home() {
                             activeNode?.data.category === "Webhook" ?
                             <WebhookForm node={activeNode} onChange={updateNodeHandler}/>
                             : activeNode?.data.category === "HTTP" ?
-                            <HttpRequestForm node={activeNode} onChange={updateNodeHandler}/>
+                            <HttpRequestForm node={activeNode} onChange={updateNodeHandler} setExecutionLogs={addExecutionLogsHandler}/>
                             : activeNode?.data.category === "Condition" ?
                             <ConditionForm node={activeNode} onChange={updateNodeHandler}/>
                             : activeNode?.data.category === "Action" &&
@@ -274,7 +282,7 @@ export default function Home() {
                     activeNode?.data.category === "Webhook" ?
                     <WebhookForm node={activeNode} onChange={updateNodeHandler}/>
                     : activeNode?.data.category === "HTTP" ?
-                    <HttpRequestForm node={activeNode} onChange={updateNodeHandler}/>
+                    <HttpRequestForm node={activeNode} onChange={updateNodeHandler} setExecutionLogs={addExecutionLogsHandler}/>
                     : activeNode?.data.category === "Condition" ?
                     <ConditionForm node={activeNode} onChange={updateNodeHandler}/>
                     : activeNode?.data.category === "Action" ?

@@ -93,7 +93,7 @@ export default function Flow({
 
 
     return (
-        <div className="w-full h-full">
+        <div className="w-full h-2/3">
             <ReactFlow<Node<NodeData>, Edge>
                 nodes={nodes}
                 edges={edges}
