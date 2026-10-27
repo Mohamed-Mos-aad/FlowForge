@@ -47,20 +47,45 @@ export default function HttpRequestForm({node, onChange, setExecutionLogs}: Node
         });
     };
     const testRequestHandler = async ()=>{
-        if(!node.data.request?.url) return
-        const res = await fetch(node.data.request?.url)
-        if (!res.ok) {
-            onChange(node.id, {
-                errorMsg: "there is error"
+        const req = node.data.request;
+        if (!req?.url) return;
+
+        const start = performance.now();
+
+        try {
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), req.timeout || 10000);
+
+
+            const res = await fetch(req.url, {
+                method: req.type ?? "GET",
+                headers: {
+                    ...(req.headers?.accept && { Accept: req.headers.accept }),
+                    ...(req.body && { "Content-Type": "application/json" }),
+                },
+                body: req.type !== "GET" && req.body ? req.body : undefined,
+                signal: controller.signal,
             });
+
+            clearTimeout(timer);
+
+            const text = await res.text();
+            let data: unknown = text;
+            try { data = JSON.parse(text); } catch {}
+
+            const ms = Math.round(performance.now() - start);
+            onChange(node.id, { status: { success: res.ok, ms }, errorMsg: res.ok ? "" : `HTTP ${res.status}` });
+            setExecutionLogs({
+                time: new Date().toLocaleTimeString(),
+                success: res.ok,
+                title: node.data.label,
+                message: JSON.stringify(data, null, 2),
+            });
+
+        } catch (err) {
+            const ms = Math.round(performance.now() - start);
+            onChange(node.id, { status: { success: false, ms }, errorMsg: (err as Error).message });
         }
-        const data = await res.json()
-        setExecutionLogs({
-            time: new Date().toLocaleTimeString(),
-            success: true,
-            title: node.data.label,
-            message: data.toString()
-        })
     }
 
 
