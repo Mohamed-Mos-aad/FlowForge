@@ -44,6 +44,17 @@ export default function HttpRequestForm({node, onChange}: NodeFormProps) {
             },
         });
     };
+    const testRequestHandler = async ()=>{
+        if(!node.data.request?.url) return
+        const res = await fetch(node.data.request?.url)
+        if (!res.ok) {
+            onChange(node.id, {
+                errorMsg: "there is error"
+            });
+        }
+        const data = await res.json()
+        console.log(data)
+    }
 
 
 
@@ -223,9 +234,7 @@ export default function HttpRequestForm({node, onChange}: NodeFormProps) {
             <div className="w-full p-3.5">
                 <button
                     type="button"
-                    onClick={() => {
-                        console.log("Test request:", node.data);
-                    }}
+                    onClick={testRequestHandler}
                     className="w-full border border-[#2B2E35] rounded-lg p-2 mt-1.5 cursor-pointer hover:bg-[#22252B] text-[11px] text-[#E3E5E8]"
                 >
                     Test request

@@ -26,7 +26,7 @@ export default function Home() {
     const [ isPanelOpen, setIsPanelOpen ] = useState(false);
     const [activeNode, setActiveNode] = useState<Node<NodeData> | null>(null);
 
-    console.log(path)
+
 
     // ** Handlers
     const addNodeHandler = (type: "Webhook" | "Action" | "Condition" | "HTTP")=>{
@@ -55,6 +55,7 @@ export default function Home() {
                     },
                     category: type,
                     webhook:{
+                        method: "POST",
                         url: `https://flowforge-beta.vercel.app/api/webhooks/${path}`
                     },
                     request: {
@@ -149,7 +150,7 @@ export default function Home() {
 
             <div className="flex flex-1 min-h-0 w-full">
                 <div className="flex-1 min-w-0 min-h-0 relative">
-                    <h3 className="absolute top-3.5 left-3.5 z-200 text-[10px] text-[#9197A2]">Test Onboarding · {nodes.length} nodes · {edges.length} edges</h3>
+                    <h3 className="absolute top-3.5 left-3.5 z-1 text-[10px] text-[#9197A2]">Test Onboarding · {nodes.length} nodes · {edges.length} edges</h3>
                     <Flow nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} setActiveNode={setActiveNode} setIsPanelOpen={setIsPanelOpen}/>
                 </div>
                 {isPanelOpen && activeNode ? (
