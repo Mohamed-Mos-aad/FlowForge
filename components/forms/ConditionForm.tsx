@@ -48,22 +48,36 @@ export default function ConditionForm({node, onChange, resData, setExecutionLogs
             return undefined;
         }, item);
     }
-    const testConditionHandler = ()=>{
+    const testConditionHandler = () => {
         const { leftValue = "", operator = "equals", rightValue = "" } = condition;
-        resData.map(item => {
-            const left = resolveExpression(leftValue, item);
-            const right = resolveExpression(rightValue, item);
-            const result = evaluateCondition(left, (operator || "equals") as Operator, right);
-            onChange(node.id, { status: { success: result, ms: 0 } });
+        const items = Array.isArray(resData) ? resData : [resData];
 
+        if (items.length === 0) {
             setExecutionLogs({
                 time: new Date().toLocaleTimeString(),
-                success: result,
+                success: false,
                 title: node.data.label,
-                message: `${leftValue} ${operator} ${rightValue} → ${result ? "True" : "False"}`,
-            })
-        })
-    }
+                message: "No input items to evaluate",
+            });
+            return;
+        }
+
+        let passed = 0;
+        for (const item of items) {
+            const left = resolveExpression(leftValue, item);
+            const right = resolveExpression(rightValue, item);
+            if (evaluateCondition(left, operator as Operator, right)) passed++;
+        }
+        const failed = items.length - passed;
+
+        onChange(node.id, { status: { success: passed > 0, ms: 0 } });
+        setExecutionLogs({
+            time: new Date().toLocaleTimeString(),
+            success: passed > 0,
+            title: node.data.label,
+            message: `${leftValue} ${operator} ${rightValue} → ${passed} true / ${failed} false`,
+        });
+    };
 
 
     return (
