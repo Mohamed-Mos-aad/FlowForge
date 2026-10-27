@@ -69,7 +69,7 @@ export default function Home() {
                             accept: "application/json",
                             requestId: "",
                         },
-                        timeout: 1000,
+                        timeout: 10000,
                         retries: 0,
                     },
                     errorMsg: "",

@@ -16,13 +16,17 @@ export type WorkflowNodeType = Node<
 export default function CustomNode({
                                        data,
                                    }: NodeProps<WorkflowNodeType>) {
+
+
     return (
         <div className="w-34 max-w-34">
-            <Handle
-                type="target"
-                position={Position.Left}
-                className="!h-2 !w-2 !border-2 !border-[#9197A2] !bg-[#0F1113]"
-            />
+            {data.category !== "Webhook" && (
+                <Handle
+                    type="target"
+                    position={Position.Left}
+                    className="!h-2 !w-2 !border-2 !border-[#9197A2] !bg-[#0F1113]"
+                />
+            )}
             <div className="flex-col gap-2">
                 <div className="flex justify-between items-center gap-2">
                     <div className="flex items-center gap-2 min-w-0 flex-1">
@@ -81,11 +85,30 @@ export default function CustomNode({
                     <span className="shrink-0">{data.status?.ms} ms</span>
                 </div>
             </div>
-            <Handle
-                type="source"
-                position={Position.Right}
-                className="!h-2 !w-2 !border-2 !border-[#9197A2] !bg-[#0F1113]"
-            />
+            {data.category === "Condition" ? (
+                <>
+                    <Handle
+                        type="source"
+                        position={Position.Right}
+                        id="true"
+                        style={{ top: "30%" }}
+                        className="!h-2 !w-2 !border-2 !border-[#6BC18F] !bg-[#0F1113]"
+                    />
+                    <Handle
+                        type="source"
+                        position={Position.Right}
+                        id="false"
+                        style={{ top: "70%" }}
+                        className="!h-2 !w-2 !border-2 !border-[#EF7B63] !bg-[#0F1113]"
+                    />
+                </>
+            ) : (
+                <Handle
+                    type="source"
+                    position={Position.Right}
+                    className="!h-2 !w-2 !border-2 !border-[#9197A2] !bg-[#0F1113]"
+                />
+            )}
         </div>
     );
 }

@@ -23,7 +23,15 @@ export default function ActionForm({node, nodes, edges, onChange, setExecutionLo
     const status = node.data.status;
     const resData = useMemo(() => {
         const incoming = edges?.find(edge => edge.target === node.id);
-        const out = nodes?.find(n => n.id === incoming?.source)?.data.output;
+        if (!incoming) return [];
+
+        const src = nodes?.find(n => n.id === incoming.source);
+        let out: unknown = src?.data.output;
+
+        if (src?.data.category === "Condition" && incoming.sourceHandle) {
+            out = (out as Record<string, unknown> | undefined)?.[incoming.sourceHandle];
+        }
+
         return Array.isArray(out) ? out : out !== undefined ? [out] : [];
     }, [edges, nodes, node.id]);
 

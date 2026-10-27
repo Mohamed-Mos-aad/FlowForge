@@ -74,7 +74,7 @@ export default function HttpRequestForm({node, onChange, setExecutionLogs}: Node
             try { data = JSON.parse(text); } catch {}
 
             const ms = Math.round(performance.now() - start);
-            onChange(node.id, { status: { success: res.ok, ms }, errorMsg: res.ok ? "" : `HTTP ${res.status}`, output: data as []});
+            onChange(node.id, { status: { success: res.ok, ms }, errorMsg: res.ok ? "" : `HTTP ${res.status}`, output: data as unknown});
             setExecutionLogs({
                 time: new Date().toLocaleTimeString(),
                 success: res.ok,
@@ -85,6 +85,12 @@ export default function HttpRequestForm({node, onChange, setExecutionLogs}: Node
         } catch (err) {
             const ms = Math.round(performance.now() - start);
             onChange(node.id, { status: { success: false, ms }, errorMsg: (err as Error).message });
+            setExecutionLogs({
+                time: new Date().toLocaleTimeString(),
+                success: false,
+                title: node.data.label,
+                message: "Error happened",
+            });
         }
     }
 
@@ -226,7 +232,7 @@ export default function HttpRequestForm({node, onChange, setExecutionLogs}: Node
                             min="1"
                             name="timeout"
                             id="timeout"
-                            value={request.timeout ?? 1000}
+                            value={request.timeout ?? 10000}
                             onChange={e =>
                                 updateRequestHandler(
                                     "timeout",

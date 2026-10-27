@@ -60,7 +60,16 @@ export default function ConditionForm({node, nodes, edges, onChange, setExecutio
         }
         const failed = items.length - passed;
 
-        onChange(node.id, { status: { success: passed > 0, ms: 0 }, output: items });
+        const passedItems = items.filter(item =>
+            evaluateCondition(resolveExpression(leftValue, item), operator as Operator, resolveExpression(rightValue, item))
+        );
+        const failedItems = items.filter(i => !passedItems.includes(i));
+
+        onChange(node.id, {
+            status: { success: passedItems.length > 0, ms: 0 },
+            output: { true: passedItems, false: failedItems },
+        });
+
         setExecutionLogs({
             time: new Date().toLocaleTimeString(),
             success: passed > 0,
