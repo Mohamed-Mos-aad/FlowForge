@@ -75,29 +75,29 @@ export default function NavBar() {
                 </div>
 
                 <ul className="flex flex-col gap-2 text-[13px] text-[#9197A2]">
-                    <li className={`p-2 border-l-2 cursor-pointer ${activePage === 'Workflows' ? 'bg-[#1D2025] border-[#C7F568]' : 'border-transparent'}`} onClick={()=>activePageHandler("Workflows")}>
-                        <Link href="/workflows">Workflows</Link>
+                    <li className={`w-full p-2 border-l-2 cursor-pointer ${activePage === 'Workflows' ? 'bg-[#1D2025] border-[#C7F568]' : 'border-transparent'}`} onClick={()=>activePageHandler("Workflows")}>
+                        <Link href="/workflows" className="flex ">Workflows</Link>
                     </li>
-                    <li className={`p-2 border-l-2 cursor-pointer ${activePage === 'Templates' ? 'bg-[#1D2025] border-[#C7F568]' : 'border-transparent'}`} onClick={()=>activePageHandler("Templates")}>
-                        <Link href="/workflows">Templates</Link>
+                    <li className={`w-full p-2 border-l-2 cursor-pointer ${activePage === 'Templates' ? 'bg-[#1D2025] border-[#C7F568]' : 'border-transparent'}`} onClick={()=>activePageHandler("Templates")}>
+                        <Link href="/workflows" className="flex ">Templates</Link>
                     </li>
-                    <li className={`p-2 border-l-2 cursor-pointer ${activePage === 'Connections' ? 'bg-[#1D2025] border-[#C7F568]' : 'border-transparent'}`} onClick={()=>activePageHandler("Connections")}>
-                        <Link href="/workflows">Connections</Link>
+                    <li className={`w-full p-2 border-l-2 cursor-pointer ${activePage === 'Connections' ? 'bg-[#1D2025] border-[#C7F568]' : 'border-transparent'}`} onClick={()=>activePageHandler("Connections")}>
+                        <Link href="/workflows" className="flex ">Connections</Link>
                     </li>
-                    <li className={`p-2 border-l-2 cursor-pointer ${activePage === 'OPERATE' ? 'bg-[#1D2025] border-[#C7F568]' : 'border-transparent'}`} onClick={()=>activePageHandler("OPERATE")}>
-                        <Link href="/workflows">OPERATE</Link>
+                    <li className={`w-full p-2 border-l-2 cursor-pointer ${activePage === 'OPERATE' ? 'bg-[#1D2025] border-[#C7F568]' : 'border-transparent'}`} onClick={()=>activePageHandler("OPERATE")}>
+                        <Link href="/workflows" className="flex ">OPERATE</Link>
                     </li>
-                    <li className={`p-2 border-l-2 cursor-pointer ${activePage === 'Overview' ? 'bg-[#1D2025] border-[#C7F568]' : 'border-transparent'}`} onClick={()=>activePageHandler("Overview")}>
-                        <Link href="/workflows">Overview</Link>
+                    <li className={`w-full p-2 border-l-2 cursor-pointer ${activePage === 'Overview' ? 'bg-[#1D2025] border-[#C7F568]' : 'border-transparent'}`} onClick={()=>activePageHandler("Overview")}>
+                        <Link href="/workflows" className="flex ">Overview</Link>
                     </li>
-                    <li className={`p-2 border-l-2 cursor-pointer ${activePage === 'Executions' ? 'bg-[#1D2025] border-[#C7F568]' : 'border-transparent'}`} onClick={()=>activePageHandler("Executions")}>
-                        <Link href="/workflows">Executions</Link>
+                    <li className={`w-full p-2 border-l-2 cursor-pointer ${activePage === 'Executions' ? 'bg-[#1D2025] border-[#C7F568]' : 'border-transparent'}`} onClick={()=>activePageHandler("Executions")}>
+                        <Link href="/workflows" className="flex ">Executions</Link>
                     </li>
-                    <li className={`p-2 border-l-2 cursor-pointer ${activePage === 'Activity' ? 'bg-[#1D2025] border-[#C7F568]' : 'border-transparent'}`} onClick={()=>activePageHandler("Activity")}>
-                        <Link href="/workflows">Activity</Link>
+                    <li className={`w-full p-2 border-l-2 cursor-pointer ${activePage === 'Activity' ? 'bg-[#1D2025] border-[#C7F568]' : 'border-transparent'}`} onClick={()=>activePageHandler("Activity")}>
+                        <Link href="/workflows" className="flex ">Activity</Link>
                     </li>
-                    <li className={`p-2 border-l-2 cursor-pointer ${activePage === 'Settings' ? 'bg-[#1D2025] border-[#C7F568]' : 'border-transparent'}`} onClick={()=>activePageHandler("Settings")}>
-                        <Link href="/workflows">Settings</Link>
+                    <li className={`w-full p-2 border-l-2 cursor-pointer ${activePage === 'Settings' ? 'bg-[#1D2025] border-[#C7F568]' : 'border-transparent'}`} onClick={()=>activePageHandler("Settings")}>
+                        <Link href="/workflows" className="flex ">Settings</Link>
                     </li>
                 </ul>
             </nav>
