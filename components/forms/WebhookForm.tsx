@@ -76,6 +76,7 @@ export default function WebhookForm({node, onChange}: NodeFormProps) {
                         type="text"
                         name="endpointUrl"
                         id="endpointUrl"
+                        readOnly
                         value={webhook.url}
                         className="bg-[#0F1113] border border-[#2B2E35] rounded-[3px] px-2.5 py-1.5 text-[11px] text-[#9197A2] focus:outline-0 select-all"
                     />

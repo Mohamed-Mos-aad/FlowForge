@@ -15,6 +15,7 @@ import {NodeData} from "@/app/types/node";
 // ** Constants
 const initialNodes: Node<NodeData>[] = [];
 const initialEdges: Edge[] = [];
+const path = crypto.randomUUID();
 
 
 
@@ -25,7 +26,7 @@ export default function Home() {
     const [ isPanelOpen, setIsPanelOpen ] = useState(false);
     const [activeNode, setActiveNode] = useState<Node<NodeData> | null>(null);
 
-
+    console.log(path)
 
     // ** Handlers
     const addNodeHandler = (type: "Webhook" | "Action" | "Condition" | "HTTP")=>{
@@ -53,6 +54,9 @@ export default function Home() {
                         ms: 0,
                     },
                     category: type,
+                    webhook:{
+                        url: `https://flowforge-beta.vercel.app/api/webhooks/${path}`
+                    },
                     request: {
                         type: "GET",
                         url: "",
