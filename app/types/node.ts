@@ -40,6 +40,7 @@ export interface NodeData extends Record<string, unknown> {
     description?: string;
     category: string;
     status?: NodeState;
+    output?: unknown,
     errorMsg?: string;
     request?: Partial<NodeRequest>;
     webhook? : Partial<NodeWebhook>;

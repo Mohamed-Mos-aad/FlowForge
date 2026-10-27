@@ -1,22 +1,31 @@
 // ** React Flow
-import type {Node} from "@xyflow/react";
+import type {Edge, Node} from "@xyflow/react";
+// ** Hooks && Tools
+import {useMemo} from "react";
 // ** Interfaces
 import {NodeData} from "@/app/types/node";
 import {logProps} from "@/app/types/types";
+// ** Lib
+import {evaluateCondition, Operator, resolveExpression} from "@/app/lib/condition";
 interface NodeFormProps {
     node: Node<NodeData>;
+    nodes: Node<NodeData>[];
+    edges: Edge[];
     onChange: (id: string, data: Partial<NodeData>) => void;
     setExecutionLogs: (log: logProps)=> void
-    resData: [];
 }
-type Operator = "equals" | "not_equals" | "contains" | "greater_than" | "less_than" | "is_empty";
 
 
 
-export default function ConditionForm({node, onChange, resData, setExecutionLogs}: NodeFormProps) {
+export default function ConditionForm({node, nodes, edges, onChange, setExecutionLogs}: NodeFormProps) {
     // ** Constants
     const condition = node.data.condition ?? {};
     const status = node.data.status;
+    const resData = useMemo(() => {
+        const incoming = edges.find(edge => edge.target === node.id);
+        const out = nodes.find(n => n.id === incoming?.source)?.data.output;
+        return Array.isArray(out) ? out : out !== undefined ? [out] : [];
+    }, [edges, nodes, node.id]);
 
 
 
@@ -29,25 +38,6 @@ export default function ConditionForm({node, onChange, resData, setExecutionLogs
             },
         });
     };
-    function evaluateCondition(left: unknown, operator: Operator, right: unknown): boolean {
-        switch (operator) {
-            case "equals":       return String(left) === String(right);
-            case "not_equals":   return String(left) !== String(right);
-            case "contains":     return String(left).includes(String(right));
-            case "greater_than": return Number(left) > Number(right);
-            case "less_than":    return Number(left) < Number(right);
-            case "is_empty":     return left === undefined || left === null || String(left).trim() === "";
-            default:             return false;
-        }
-    }
-    function resolveExpression(input: string, item: unknown): unknown {
-        const match = input.match(/^\{\{\s*(.+?)\s*\}\}$/);
-        if (!match) return input;
-        return match[1].split(".").reduce<unknown>((obj, key) => {
-            if (obj !== null && typeof obj === "object") return (obj as Record<string, unknown>)[key];
-            return undefined;
-        }, item);
-    }
     const testConditionHandler = () => {
         const { leftValue = "", operator = "equals", rightValue = "" } = condition;
         const items = Array.isArray(resData) ? resData : [resData];
@@ -78,6 +68,7 @@ export default function ConditionForm({node, onChange, resData, setExecutionLogs
             message: `${leftValue} ${operator} ${rightValue} → ${passed} true / ${failed} false`,
         });
     };
+
 
 
     return (

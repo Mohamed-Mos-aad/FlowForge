@@ -28,7 +28,6 @@ export default function Home() {
     const [ isPanelOpen, setIsPanelOpen ] = useState(false);
     const [ activeNode, setActiveNode] = useState<Node<NodeData> | null>(null);
     const [ executionLogs, setExecutionLogs] = useState<logProps[]>([])
-    const [ resData, setResData ] = useState<[]>([])
 
 
 
@@ -117,9 +116,6 @@ export default function Home() {
             log
         ])
     }
-    const addResDataHandler = (data:[])=>{
-        setResData(data)
-    }
 
 
 
@@ -173,9 +169,9 @@ export default function Home() {
                             activeNode?.data.category === "Webhook" ?
                             <WebhookForm node={activeNode} onChange={updateNodeHandler}/>
                             : activeNode?.data.category === "HTTP" ?
-                            <HttpRequestForm node={activeNode} onChange={updateNodeHandler} setExecutionLogs={addExecutionLogsHandler} setResData={addResDataHandler}/>
+                            <HttpRequestForm node={activeNode} onChange={updateNodeHandler} setExecutionLogs={addExecutionLogsHandler}/>
                             : activeNode?.data.category === "Condition" ?
-                            <ConditionForm node={activeNode} onChange={updateNodeHandler} setExecutionLogs={addExecutionLogsHandler} resData={resData}/>
+                            <ConditionForm node={activeNode} onChange={updateNodeHandler} setExecutionLogs={addExecutionLogsHandler} nodes={nodes} edges={edges}/>
                             : activeNode?.data.category === "Action" &&
                             <ActionForm node={activeNode} onChange={updateNodeHandler}/>
                         }
@@ -288,9 +284,9 @@ export default function Home() {
                     activeNode?.data.category === "Webhook" ?
                     <WebhookForm node={activeNode} onChange={updateNodeHandler}/>
                     : activeNode?.data.category === "HTTP" ?
-                    <HttpRequestForm node={activeNode} onChange={updateNodeHandler} setExecutionLogs={addExecutionLogsHandler} setResData={addResDataHandler}/>
+                    <HttpRequestForm node={activeNode} onChange={updateNodeHandler} setExecutionLogs={addExecutionLogsHandler}/>
                     : activeNode?.data.category === "Condition" ?
-                    <ConditionForm node={activeNode} onChange={updateNodeHandler} setExecutionLogs={addExecutionLogsHandler} resData={resData}/>
+                    <ConditionForm node={activeNode} onChange={updateNodeHandler} setExecutionLogs={addExecutionLogsHandler} nodes={nodes} edges={edges}/>
                     : activeNode?.data.category === "Action" ?
                     <ActionForm node={activeNode} onChange={updateNodeHandler}/>
                     :

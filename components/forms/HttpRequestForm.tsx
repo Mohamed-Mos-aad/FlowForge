@@ -7,13 +7,12 @@ interface NodeFormProps {
     node: Node<NodeData>;
     onChange: (id: string, data: Partial<NodeData>) => void;
     setExecutionLogs: (log: logProps)=> void
-    setResData: (data: [])=> void;
 }
 
 
 
 
-export default function HttpRequestForm({node, onChange, setExecutionLogs, setResData}: NodeFormProps) {
+export default function HttpRequestForm({node, onChange, setExecutionLogs}: NodeFormProps) {
     // ** Data
     const request = node.data.request ?? {};
     const headers: Partial<RequestHeaders> = request.headers ?? {};
@@ -75,8 +74,7 @@ export default function HttpRequestForm({node, onChange, setExecutionLogs, setRe
             try { data = JSON.parse(text); } catch {}
 
             const ms = Math.round(performance.now() - start);
-            onChange(node.id, { status: { success: res.ok, ms }, errorMsg: res.ok ? "" : `HTTP ${res.status}`});
-            setResData(data as []);
+            onChange(node.id, { status: { success: res.ok, ms }, errorMsg: res.ok ? "" : `HTTP ${res.status}`, output: data as []});
             setExecutionLogs({
                 time: new Date().toLocaleTimeString(),
                 success: res.ok,
