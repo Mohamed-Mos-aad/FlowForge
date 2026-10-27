@@ -3,4 +3,4 @@ export interface logProps {
     success: boolean;
     title: string;
     message: string;
-}[]
+}

@@ -2,14 +2,18 @@
 import type {Node} from "@xyflow/react";
 // ** Interfaces
 import {NodeData} from "@/app/types/node";
+import {logProps} from "@/app/types/types";
 interface NodeFormProps {
     node: Node<NodeData>;
     onChange: (id: string, data: Partial<NodeData>) => void;
+    setExecutionLogs: (log: logProps)=> void
+    resData: [];
 }
+type Operator = "equals" | "not_equals" | "contains" | "greater_than" | "less_than" | "is_empty";
 
 
 
-export default function ConditionForm({node, onChange}: NodeFormProps) {
+export default function ConditionForm({node, onChange, resData, setExecutionLogs}: NodeFormProps) {
     // ** Constants
     const condition = node.data.condition ?? {};
     const status = node.data.status;
@@ -25,7 +29,41 @@ export default function ConditionForm({node, onChange}: NodeFormProps) {
             },
         });
     };
+    function evaluateCondition(left: unknown, operator: Operator, right: unknown): boolean {
+        switch (operator) {
+            case "equals":       return String(left) === String(right);
+            case "not_equals":   return String(left) !== String(right);
+            case "contains":     return String(left).includes(String(right));
+            case "greater_than": return Number(left) > Number(right);
+            case "less_than":    return Number(left) < Number(right);
+            case "is_empty":     return left === undefined || left === null || String(left).trim() === "";
+            default:             return false;
+        }
+    }
+    function resolveExpression(input: string, item: unknown): unknown {
+        const match = input.match(/^\{\{\s*(.+?)\s*\}\}$/);
+        if (!match) return input;
+        return match[1].split(".").reduce<unknown>((obj, key) => {
+            if (obj !== null && typeof obj === "object") return (obj as Record<string, unknown>)[key];
+            return undefined;
+        }, item);
+    }
+    const testConditionHandler = ()=>{
+        const { leftValue = "", operator = "equals", rightValue = "" } = condition;
+        resData.map(item => {
+            const left = resolveExpression(leftValue, item);
+            const right = resolveExpression(rightValue, item);
+            const result = evaluateCondition(left, (operator || "equals") as Operator, right);
+            onChange(node.id, { status: { success: result, ms: 0 } });
 
+            setExecutionLogs({
+                time: new Date().toLocaleTimeString(),
+                success: result,
+                title: node.data.label,
+                message: `${leftValue} ${operator} ${rightValue} → ${result ? "True" : "False"}`,
+            })
+        })
+    }
 
 
     return (
@@ -104,7 +142,7 @@ export default function ConditionForm({node, onChange}: NodeFormProps) {
             <div className="w-full p-3.5">
                 <button
                     type="button"
-                    onClick={() => console.log("Test condition evaluation:", node.data)}
+                    onClick={testConditionHandler}
                     className="w-full border border-[#2B2E35] rounded-lg p-2 mt-1.5 cursor-pointer hover:bg-[#22252B] text-[11px] text-[#E3E5E8]"
                 >
                     Test condition
