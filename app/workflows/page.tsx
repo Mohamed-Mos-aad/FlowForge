@@ -45,11 +45,15 @@ function Page() {
 
         const updatedWorkflows = [...workFlowsData, newWorkFlow];
 
+        router.push(`/workflows/${newWorkFlow.id}`);
+
+        storage.set('flowForgeWorkFlows', updatedWorkflows);
+    }
+    const deleteWorkFlowHandler = (id: string)=>{
+        const updatedWorkflows:WorkFlowProps[] = workFlowsData.filter(wf => wf.id != id);
         storage.set('flowForgeWorkFlows', updatedWorkflows);
         setWorkFlowsData(updatedWorkflows);
         setDisplayedData(updatedWorkflows);
-
-        router.push(`/workflows/${newWorkFlow.id}`);
     }
     const openWorkFlowHandler= (id: string)=>{
         router.push(`/workflows/${id}`)
@@ -145,6 +149,7 @@ function Page() {
                                 <th className="px-3 py-2.25 text-start">Last run</th>
                                 <th className="px-3 py-2.25 text-start">Success</th>
                                 <th className="px-3 py-2.25 text-start">Runs</th>
+                                <th className="px-3 py-2.25 text-start">actions</th>
                             </tr>
                         </thead>
                         <tbody className="text-[13px] text-[#E3E5E8]">
@@ -156,6 +161,23 @@ function Page() {
                                         <td className="px-3 py-2.25 whitespace-nowrap">{wf.lastRun}m ago</td>
                                         <td className="px-3 py-2.25 whitespace-nowrap">{wf.success}%</td>
                                         <td className="px-3 py-2.25 whitespace-nowrap">{wf.runs}</td>
+                                        <td className="px-3 py-2.25 flex items-center gap-4">
+                                            <button
+                                                className="flex items-center cursor-pointer"
+                                                onClick={(e)=>{
+                                                    e.stopPropagation();
+                                                    deleteWorkFlowHandler(wf.id)
+                                                }}>
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M3 6H21M9 6V3H15V6M5 6L6 21H18L19 6M10 10V17M14 10V17" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#E3E5E8"/>
+                                                </svg>
+                                            </button>
+                                            <button className="flex items-center cursor-pointer">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M14 5L19 10M4 15L16 3C16.6667 2.33333 17.3333 2.33333 18 3L21 6C21.6667 6.66667 21.6667 7.33333 21 8L9 20L3 21L4 15Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#E3E5E8"/>
+                                                </svg>
+                                            </button>
+                                        </td>
                                     </tr>)
                             }
                         </tbody>
