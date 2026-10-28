@@ -15,6 +15,24 @@ function Page() {
                     </button>
                 </div>
             </header>
+            <section className="grid grid-cols-4 bg-[#17191D] border border-[#2B2E35]">
+                <div className="border-r border-[#2B2E35] p-4">
+                    <span className="text-[11px] text-[#9197A2] mb-2">Total workflows</span>
+                    <h2 className="text-[21px]">24</h2>
+                </div>
+                <div className="border-r border-[#2B2E35] p-4">
+                    <span className="text-[11px] text-[#9197A2] mb-2">Active</span>
+                    <h2 className="text-[21px]">17</h2>
+                </div>
+                <div className="border-r border-[#2B2E35] p-4">
+                    <span className="text-[11px] text-[#9197A2] mb-2">Executions · 24h</span>
+                    <h2 className="text-[21px]">3,412</h2>
+                </div>
+                <div className="p-4">
+                    <span className="text-[11px] text-[#9197A2] mb-2">Failure rate</span>
+                    <h2 className="text-[21px]">1.8%</h2>
+                </div>
+            </section>
         </div>
     );
 }
