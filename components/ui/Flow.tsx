@@ -20,7 +20,7 @@ import type {
     Connection,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import '../../app/workflows/flow.css';
+import '@/app/style/flow.css';
 // ** Interfaces
 import type {NodeData} from "@/app/types/node";
 interface FlowProps {
