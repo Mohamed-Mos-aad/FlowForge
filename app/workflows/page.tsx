@@ -1,48 +1,78 @@
 'use client'
 // ** Hooks && Tools
 import {useRouter} from "next/navigation";
-import {useState} from "react";
-// ** Data
-import {WORKFLOWS} from "@/data/test";
+import {useEffect, useState} from "react";
 // ** Interfaces
 import {WorkFlowProps} from "@/types/types";
-// ** Constants
-const WORKFLOWSNUM = WORKFLOWS.length;
-const ACTIVEWORKFLOWSNUM = WORKFLOWS.filter(fw => fw.status === 'Active').length;
-const DRAFTWORKFLOWSNUM = WORKFLOWS.filter(fw => fw.status === 'Draft').length;
-const FAILURERATE = ()=>{
-    const failureNum = WORKFLOWS.filter(fw => fw.status === 'Failing').length;
-    const failureRate = (( failureNum / WORKFLOWSNUM ) * 100).toFixed(2);
-    return failureRate
-}
+// ** Lib
+import {storage} from "@/lib/storage";
 
 
 
 function Page() {
     // ** States
-    const [ workFlowsData, setWorkFlowsData ] = useState<WorkFlowProps[]>(WORKFLOWS)
+    const [ workFlowsData, setWorkFlowsData ] = useState<WorkFlowProps[]>([])
+    const [ displayedData, setDisplayedData ] = useState<WorkFlowProps[]>(workFlowsData)
     const [ filter, setFilter ] = useState<'All' |'Active' | 'Failing' | 'Draft'>('All');
 
 
 
     // ** Constants
     const router = useRouter();
+    const WORKFLOWSNUM = workFlowsData.length;
+    const ACTIVEWORKFLOWSNUM = workFlowsData.filter(fw => fw.status === 'Active').length;
+    const DRAFTWORKFLOWSNUM = workFlowsData.filter(fw => fw.status === 'Draft').length;
+    const FAILURERATE = ()=>{
+        const failureNum = workFlowsData.filter(fw => fw.status === 'Failing').length;
+        const failureRate = failureNum > 0 ? (( failureNum / WORKFLOWSNUM ) * 100).toFixed(2) : 0;
+        return failureRate
+    }
 
 
 
     // ** Handler
     const newWorkFlowHandler = ()=>{
         const newId = crypto.randomUUID();
-        router.push(`/workflows/${newId}`)
+        const newWorkFlow:WorkFlowProps = {
+            id: newId,
+            title: 'new workflow',
+            status: 'Active',
+            lastRun: '',
+            success: 0,
+            runs: 0
+        }
+
+
+        const updatedWorkflows = [...workFlowsData, newWorkFlow];
+
+        storage.set('flowForgeWorkFlows', updatedWorkflows);
+        setWorkFlowsData(updatedWorkflows);
+        setDisplayedData(updatedWorkflows);
+
+        router.push(`/workflows/${newWorkFlow.id}`);
     }
     const openWorkFlowHandler= (id: string)=>{
         router.push(`/workflows/${id}`)
     }
     const filterDataHandler = (filterType: 'All' |'Active' | 'Failing' | 'Draft')=>{
         setFilter(filterType);
-        const filteredData = WORKFLOWS.filter(wf => wf.status === filterType);
-        setWorkFlowsData(filteredData);
+        if(filterType === 'All'){
+            setDisplayedData(workFlowsData)
+        } else {
+            const filteredData = workFlowsData.filter(wf => wf.status === filterType);
+            setDisplayedData(filteredData)
+        }
     }
+
+
+
+    // ** UseEffect
+    useEffect(()=>{
+        const WORKFLOWS:WorkFlowProps[] = storage.get('flowForgeWorkFlows') ?? [];
+        setWorkFlowsData(WORKFLOWS);
+        setDisplayedData(WORKFLOWS);
+    },[])
+
 
 
 
@@ -119,7 +149,7 @@ function Page() {
                         </thead>
                         <tbody className="text-[13px] text-[#E3E5E8]">
                             {
-                                workFlowsData.map(wf =>
+                                displayedData.map(wf =>
                                     <tr className="cursor-pointer" key={wf.id} onClick={()=>{openWorkFlowHandler(wf.id)}}>
                                         <td className="px-3 py-2.25 whitespace-nowrap">{wf.title}</td>
                                         <td className={`px-3 py-2.25 whitespace-nowrap ${wf.status === "Active" ? 'text-[#6BC18F]' : wf.status === "Failing" ? 'text-[#EF7B63]' : 'text-[#9197A2]'}`}>● {wf.status}</td>
