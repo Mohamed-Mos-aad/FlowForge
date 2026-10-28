@@ -1,10 +1,21 @@
 'use client'
 // ** Hooks && Tools
 import {useRouter} from "next/navigation";
+import {useState} from "react";
 // ** Data
 import {WORKFLOWS} from "@/data/test";
+// ** Interfaces
+import {WorkFlowProps} from "@/types/types";
+
+
 
 function Page() {
+    // ** States
+    const [ workFlowsData, setWorkFlowsData ] = useState<WorkFlowProps[]>(WORKFLOWS)
+    const [ filter, setFilter ] = useState<'All' |'Active' | 'Failing' | 'Draft'>('All');
+
+
+
     // ** Constants
     const router = useRouter();
 
@@ -17,6 +28,11 @@ function Page() {
     }
     const openWorkFlowHandler= (id: string)=>{
         router.push(`/workflows/${id}`)
+    }
+    const filterDataHandler = (filterType: 'All' |'Active' | 'Failing' | 'Draft')=>{
+        setFilter(filterType);
+        const filteredData = WORKFLOWS.filter(wf => wf.status === filterType);
+        setWorkFlowsData(filteredData);
     }
 
 
@@ -59,16 +75,24 @@ function Page() {
             </section>
             <section className="flex flex-col gap-2 min-w-0">
                 <div className="flex flex-wrap gap-1.5">
-                    <button className="bg-[#17191D] py-1.75 px-3 sm:px-3 border border-[#2B2E35] text-[12px] sm:text-[13px] text-[#E3E5E8] rounded-lg cursor-pointer whitespace-nowrap">
+                    <button
+                        className={`bg-[#17191D] py-1.75 px-3 sm:px-3 border ${filter === 'All' ? 'border-[#C7F568]' : 'border-[#2B2E35]'} text-[12px] sm:text-[13px] text-[#E3E5E8] rounded-lg cursor-pointer whitespace-nowrap`}
+                        onClick={()=>filterDataHandler('All')}>
                         All
                     </button>
-                    <button className="bg-[#17191D] py-1.75 px-3 sm:px-3 border border-[#2B2E35] text-[12px] sm:text-[13px] text-[#E3E5E8] rounded-lg cursor-pointer whitespace-nowrap">
+                    <button
+                        className={`bg-[#17191D] py-1.75 px-3 sm:px-3 border ${filter === 'Active' ? 'border-[#C7F568]' : 'border-[#2B2E35]'} text-[12px] sm:text-[13px] text-[#E3E5E8] rounded-lg cursor-pointer whitespace-nowrap`}
+                        onClick={()=>filterDataHandler('Active')}>
                         Active
                     </button>
-                    <button className="bg-[#17191D] py-1.75 px-3 sm:px-3 border border-[#2B2E35] text-[12px] sm:text-[13px] text-[#E3E5E8] rounded-lg cursor-pointer whitespace-nowrap">
+                    <button
+                        className={`bg-[#17191D] py-1.75 px-3 sm:px-3 border ${filter === 'Draft' ? 'border-[#C7F568]' : 'border-[#2B2E35]'} text-[12px] sm:text-[13px] text-[#E3E5E8] rounded-lg cursor-pointer whitespace-nowrap`}
+                        onClick={()=>filterDataHandler('Draft')}>
                         Draft
                     </button>
-                    <button className="bg-[#17191D] py-1.75 px-3 sm:px-3 border border-[#2B2E35] text-[12px] sm:text-[13px] text-[#E3E5E8] rounded-lg cursor-pointer whitespace-nowrap">
+                    <button
+                        className={`bg-[#17191D] py-1.75 px-3 sm:px-3 border ${filter === 'Failing' ? 'border-[#C7F568]' : 'border-[#2B2E35]'} text-[12px] sm:text-[13px] text-[#E3E5E8] rounded-lg cursor-pointer whitespace-nowrap`}
+                        onClick={()=>filterDataHandler('Failing')}>
                         Failing
                     </button>
                 </div>
@@ -86,7 +110,7 @@ function Page() {
                         </thead>
                         <tbody className="text-[13px] text-[#E3E5E8]">
                             {
-                                WORKFLOWS.map(wf =>
+                                workFlowsData.map(wf =>
                                     <tr className="cursor-pointer" key={wf.id} onClick={()=>{openWorkFlowHandler(wf.id)}}>
                                         <td className="px-3 py-2.25 whitespace-nowrap">{wf.title}</td>
                                         <td className={`px-3 py-2.25 whitespace-nowrap ${wf.status === "Active" ? 'text-[#6BC18F]' : wf.status === "Failing" ? 'text-[#EF7B63]' : 'text-[#9197A2]'}`}>● {wf.status}</td>
