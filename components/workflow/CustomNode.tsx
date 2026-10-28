@@ -7,7 +7,7 @@ import {
     type NodeProps,
 } from "@xyflow/react";
 // ** Interfaces
-import {NodeData} from "@/app/types/node";
+import {NodeData} from "@/types/node";
 export type WorkflowNodeType = Node<
     NodeData,
     "custom"

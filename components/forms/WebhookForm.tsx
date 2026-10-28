@@ -1,7 +1,7 @@
 // ** React Flow
 import type {Node} from "@xyflow/react";
 // ** Interfaces
-import {NodeData} from "@/app/types/node";
+import {NodeData} from "@/types/node";
 interface NodeFormProps {
     node: Node<NodeData>;
     onChange: (id: string, data: Partial<NodeData>) => void;

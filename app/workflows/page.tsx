@@ -1,13 +1,22 @@
 'use client'
 // ** Hooks && Tools
-
+import {useRouter} from "next/navigation";
 // ** Data
-import {WORKFLOWS} from "@/app/data/test";
+import {WORKFLOWS} from "@/data/test";
 
 function Page() {
+    // ** Constants
+    const router = useRouter();
+
+
+
     // ** Handler
     const newWorkFlowHandler = ()=>{
-
+        const newId = crypto.randomUUID();
+        router.push(`/workflows/${newId}`)
+    }
+    const openWorkFlowHandler= (id: string)=>{
+        router.push(`/workflows/${id}`)
     }
 
 
@@ -76,27 +85,16 @@ function Page() {
                             </tr>
                         </thead>
                         <tbody className="text-[13px] text-[#E3E5E8]">
-                            <tr className="cursor-pointer">
-                                <td className="px-3 py-2.25 whitespace-nowrap">Customer Onboarding</td>
-                                <td className={`px-3 py-2.25 whitespace-nowrap ${true ? 'text-[#6BC18F]' : 'text-[#EF7B63]'}`}>● Active</td>
-                                <td className="px-3 py-2.25 whitespace-nowrap">2m ago</td>
-                                <td className="px-3 py-2.25 whitespace-nowrap">99.2%</td>
-                                <td className="px-3 py-2.25 whitespace-nowrap">12,408</td>
-                            </tr>
-                            <tr className="cursor-pointer">
-                                <td className="px-3 py-2.25 whitespace-nowrap">Customer Onboarding</td>
-                                <td className={`min-w-fit px-3 py-2.25 whitespace-nowrap ${false ? 'text-[#6BC18F]' : 'text-[#EF7B63]'}`}>● Failing</td>
-                                <td className="px-3 py-2.25 whitespace-nowrap">2m ago</td>
-                                <td className="px-3 py-2.25 whitespace-nowrap">99.2%</td>
-                                <td className="px-3 py-2.25 whitespace-nowrap">12,408</td>
-                            </tr>
-                            <tr className="cursor-pointer">
-                                <td className="px-3 py-2.25 whitespace-nowrap">Customer Onboarding</td>
-                                <td className={`min-w-fit px-3 py-2.25 whitespace-nowrap ${false ? 'text-[#6BC18F]' : 'text-[#9197A2]'}`}>● Draft</td>
-                                <td className="px-3 py-2.25 whitespace-nowrap">2m ago</td>
-                                <td className="px-3 py-2.25 whitespace-nowrap">99.2%</td>
-                                <td className="px-3 py-2.25 whitespace-nowrap">12,408</td>
-                            </tr>
+                            {
+                                WORKFLOWS.map(wf =>
+                                    <tr className="cursor-pointer" key={wf.id} onClick={()=>{openWorkFlowHandler(wf.id)}}>
+                                        <td className="px-3 py-2.25 whitespace-nowrap">{wf.title}</td>
+                                        <td className={`px-3 py-2.25 whitespace-nowrap ${wf.status === "Active" ? 'text-[#6BC18F]' : wf.status === "Failing" ? 'text-[#EF7B63]' : 'text-[#9197A2]'}`}>● {wf.status}</td>
+                                        <td className="px-3 py-2.25 whitespace-nowrap">{wf.lastRun}m ago</td>
+                                        <td className="px-3 py-2.25 whitespace-nowrap">{wf.success}%</td>
+                                        <td className="px-3 py-2.25 whitespace-nowrap">{wf.runs}</td>
+                                    </tr>)
+                            }
                         </tbody>
                     </table>
                 </div>

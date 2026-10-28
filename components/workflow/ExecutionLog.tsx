@@ -2,7 +2,7 @@
 // ** Hooks && Tools
 import {useState} from "react";
 // ** Interfaces
-import {logProps} from "@/app/types/types";
+import {logProps} from "@/types/types";
 interface ExecutionLogProps{
     logs: logProps[]
 }

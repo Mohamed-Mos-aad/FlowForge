@@ -3,9 +3,9 @@ import type {Edge, Node} from "@xyflow/react";
 // ** Hooks && Tools
 import {useMemo} from "react";
 // ** Interfaces
-import {NodeData} from "@/app/types/node";
-import {logProps} from "@/app/types/types";
-import {renderTemplate} from "@/app/lib/template";
+import {NodeData} from "@/types/node";
+import {logProps} from "@/types/types";
+import {renderTemplate} from "@/lib/template";
 interface NodeFormProps {
     node: Node<NodeData>;
     nodes: Node<NodeData>[];

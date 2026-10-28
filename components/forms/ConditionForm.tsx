@@ -3,10 +3,10 @@ import type {Edge, Node} from "@xyflow/react";
 // ** Hooks && Tools
 import {useMemo} from "react";
 // ** Interfaces
-import {NodeData} from "@/app/types/node";
-import {logProps} from "@/app/types/types";
+import {NodeData} from "@/types/node";
+import {logProps} from "@/types/types";
 // ** Lib
-import {evaluateCondition, Operator, resolveExpression} from "@/app/lib/condition";
+import {evaluateCondition, Operator, resolveExpression} from "@/lib/condition";
 interface NodeFormProps {
     node: Node<NodeData>;
     nodes: Node<NodeData>[];

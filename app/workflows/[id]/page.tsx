@@ -12,8 +12,8 @@ import type {Edge, Node} from "@xyflow/react";
 // ** Hooks && Tools
 import {useState} from "react";
 // ** Interfaces
-import {NodeData} from "@/app/types/node";
-import {logProps} from "@/app/types/types";
+import {NodeData} from "@/types/node";
+import {logProps} from "@/types/types";
 // ** Constants
 const initialNodes: Node<NodeData>[] = [];
 const initialEdges: Edge[] = [];
