@@ -6,6 +6,15 @@ import {useState} from "react";
 import {WORKFLOWS} from "@/data/test";
 // ** Interfaces
 import {WorkFlowProps} from "@/types/types";
+// ** Constants
+const WORKFLOWSNUM = WORKFLOWS.length;
+const ACTIVEWORKFLOWSNUM = WORKFLOWS.filter(fw => fw.status === 'Active').length;
+const DRAFTWORKFLOWSNUM = WORKFLOWS.filter(fw => fw.status === 'Draft').length;
+const FAILURERATE = ()=>{
+    const failureNum = WORKFLOWS.filter(fw => fw.status === 'Failing').length;
+    const failureRate = (( failureNum / WORKFLOWSNUM ) * 100).toFixed(2);
+    return failureRate
+}
 
 
 
@@ -58,19 +67,19 @@ function Page() {
             <section className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 bg-[#17191D] border border-[#2B2E35]">
                 <div className="border-r border-b lg:border-b-0 border-[#2B2E35] p-3 sm:p-4">
                     <span className="block text-[11px] text-[#9197A2] mb-2">Total workflows</span>
-                    <h2 className="text-[21px]">{WORKFLOWS.length}</h2>
+                    <h2 className="text-[21px]">{WORKFLOWSNUM}</h2>
                 </div>
                 <div className="lg:border-r border-b lg:border-b-0 border-[#2B2E35] p-3 sm:p-4">
                     <span className="block text-[11px] text-[#9197A2] mb-2">Active</span>
-                    <h2 className="text-[21px]">17</h2>
+                    <h2 className="text-[21px]">{ACTIVEWORKFLOWSNUM}</h2>
                 </div>
                 <div className="border-r border-[#2B2E35] p-3 sm:p-4">
-                    <span className="block text-[11px] text-[#9197A2] mb-2">Executions · 24h</span>
-                    <h2 className="text-[21px]">3,412</h2>
+                    <span className="block text-[11px] text-[#9197A2] mb-2">Draft</span>
+                    <h2 className="text-[21px]">{DRAFTWORKFLOWSNUM}</h2>
                 </div>
                 <div className="p-3 sm:p-4">
                     <span className="block text-[11px] text-[#9197A2] mb-2">Failure rate</span>
-                    <h2 className="text-[21px]">1.8%</h2>
+                    <h2 className="text-[21px]">{FAILURERATE()}%</h2>
                 </div>
             </section>
             <section className="flex flex-col gap-2 min-w-0">
