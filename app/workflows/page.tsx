@@ -1,5 +1,17 @@
+'use client'
+// ** Hooks && Tools
+
+// ** Data
+import {WORKFLOWS} from "@/app/data/test";
 
 function Page() {
+    // ** Handler
+    const newWorkFlowHandler = ()=>{
+
+    }
+
+
+
     return (
         <div className="w-full flex flex-col gap-4 text-[#E3E5E8] p-4 sm:p-5 md:p-7 min-w-0">
             <header className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
@@ -11,7 +23,9 @@ function Page() {
                     <button className="bg-[#17191D] py-1.75 px-3 sm:px-3 border border-[#2B2E35] text-[12px] sm:text-[13px] text-[#E3E5E8] rounded-lg cursor-pointer whitespace-nowrap">
                         Import workflow
                     </button>
-                    <button className="bg-[#C7F568] py-1.75 px-3 sm:px-4 border border-[#C7F568] rounded-lg text-[12px] sm:text-[13px] font-semibold text-[#0F1113] cursor-pointer whitespace-nowrap">
+                    <button
+                        className="bg-[#C7F568] py-1.75 px-3 sm:px-4 border border-[#C7F568] rounded-lg text-[12px] sm:text-[13px] font-semibold text-[#0F1113] cursor-pointer whitespace-nowrap"
+                        onClick={newWorkFlowHandler}>
                         New workflow
                     </button>
                 </div>
@@ -19,7 +33,7 @@ function Page() {
             <section className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 bg-[#17191D] border border-[#2B2E35]">
                 <div className="border-r border-b lg:border-b-0 border-[#2B2E35] p-3 sm:p-4">
                     <span className="block text-[11px] text-[#9197A2] mb-2">Total workflows</span>
-                    <h2 className="text-[21px]">24</h2>
+                    <h2 className="text-[21px]">{WORKFLOWS.length}</h2>
                 </div>
                 <div className="lg:border-r border-b lg:border-b-0 border-[#2B2E35] p-3 sm:p-4">
                     <span className="block text-[11px] text-[#9197A2] mb-2">Active</span>
@@ -53,36 +67,36 @@ function Page() {
                 <div className="w-full min-w-0 overflow-x-auto">
                     <table className="w-full min-w-[600px] bg-[#17191D] border border-[#2B2E35]">
                         <thead>
-                        <tr className="border-b border-[#2B2E35] text-[11px] text-[#9197A2]">
-                            <th className="px-3 py-2.25 text-start">Workflow</th>
-                            <th className="px-3 py-2.25 text-start">Status</th>
-                            <th className="px-3 py-2.25 text-start">Last run</th>
-                            <th className="px-3 py-2.25 text-start">Success</th>
-                            <th className="px-3 py-2.25 text-start">Runs</th>
-                        </tr>
+                            <tr className="border-b border-[#2B2E35] text-[11px] text-[#9197A2]">
+                                <th className="px-3 py-2.25 text-start">Workflow</th>
+                                <th className="px-3 py-2.25 text-start">Status</th>
+                                <th className="px-3 py-2.25 text-start">Last run</th>
+                                <th className="px-3 py-2.25 text-start">Success</th>
+                                <th className="px-3 py-2.25 text-start">Runs</th>
+                            </tr>
                         </thead>
                         <tbody className="text-[13px] text-[#E3E5E8]">
-                        <tr>
-                            <td className="px-3 py-2.25 whitespace-nowrap">Customer Onboarding</td>
-                            <td className={`px-3 py-2.25 whitespace-nowrap ${true ? 'text-[#6BC18F]' : 'text-[#EF7B63]'}`}>● Active</td>
-                            <td className="px-3 py-2.25 whitespace-nowrap">2m ago</td>
-                            <td className="px-3 py-2.25 whitespace-nowrap">99.2%</td>
-                            <td className="px-3 py-2.25 whitespace-nowrap">12,408</td>
-                        </tr>
-                        <tr>
-                            <td className="px-3 py-2.25 whitespace-nowrap">Customer Onboarding</td>
-                            <td className={`min-w-fit px-3 py-2.25 whitespace-nowrap ${false ? 'text-[#6BC18F]' : 'text-[#EF7B63]'}`}>● Failing</td>
-                            <td className="px-3 py-2.25 whitespace-nowrap">2m ago</td>
-                            <td className="px-3 py-2.25 whitespace-nowrap">99.2%</td>
-                            <td className="px-3 py-2.25 whitespace-nowrap">12,408</td>
-                        </tr>
-                        <tr>
-                            <td className="px-3 py-2.25 whitespace-nowrap">Customer Onboarding</td>
-                            <td className={`min-w-fit px-3 py-2.25 whitespace-nowrap ${false ? 'text-[#6BC18F]' : 'text-[#9197A2]'}`}>● Draft</td>
-                            <td className="px-3 py-2.25 whitespace-nowrap">2m ago</td>
-                            <td className="px-3 py-2.25 whitespace-nowrap">99.2%</td>
-                            <td className="px-3 py-2.25 whitespace-nowrap">12,408</td>
-                        </tr>
+                            <tr className="cursor-pointer">
+                                <td className="px-3 py-2.25 whitespace-nowrap">Customer Onboarding</td>
+                                <td className={`px-3 py-2.25 whitespace-nowrap ${true ? 'text-[#6BC18F]' : 'text-[#EF7B63]'}`}>● Active</td>
+                                <td className="px-3 py-2.25 whitespace-nowrap">2m ago</td>
+                                <td className="px-3 py-2.25 whitespace-nowrap">99.2%</td>
+                                <td className="px-3 py-2.25 whitespace-nowrap">12,408</td>
+                            </tr>
+                            <tr className="cursor-pointer">
+                                <td className="px-3 py-2.25 whitespace-nowrap">Customer Onboarding</td>
+                                <td className={`min-w-fit px-3 py-2.25 whitespace-nowrap ${false ? 'text-[#6BC18F]' : 'text-[#EF7B63]'}`}>● Failing</td>
+                                <td className="px-3 py-2.25 whitespace-nowrap">2m ago</td>
+                                <td className="px-3 py-2.25 whitespace-nowrap">99.2%</td>
+                                <td className="px-3 py-2.25 whitespace-nowrap">12,408</td>
+                            </tr>
+                            <tr className="cursor-pointer">
+                                <td className="px-3 py-2.25 whitespace-nowrap">Customer Onboarding</td>
+                                <td className={`min-w-fit px-3 py-2.25 whitespace-nowrap ${false ? 'text-[#6BC18F]' : 'text-[#9197A2]'}`}>● Draft</td>
+                                <td className="px-3 py-2.25 whitespace-nowrap">2m ago</td>
+                                <td className="px-3 py-2.25 whitespace-nowrap">99.2%</td>
+                                <td className="px-3 py-2.25 whitespace-nowrap">12,408</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
