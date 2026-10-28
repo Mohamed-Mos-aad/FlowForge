@@ -35,7 +35,7 @@ function Page() {
         const newId = crypto.randomUUID();
         const newWorkFlow:WorkFlowProps = {
             id: newId,
-            title: 'new workflow',
+            title: `new workflow ${workFlowsData.length > 0 ? workFlowsData.length : '' }`,
             status: 'Active',
             lastRun: '',
             success: 0,
@@ -45,9 +45,9 @@ function Page() {
 
         const updatedWorkflows = [...workFlowsData, newWorkFlow];
 
-        router.push(`/workflows/${newWorkFlow.id}`);
-
         storage.set('flowForgeWorkFlows', updatedWorkflows);
+
+        router.push(`/workflows/${newWorkFlow.id}`);
     }
     const deleteWorkFlowHandler = (id: string)=>{
         const updatedWorkflows:WorkFlowProps[] = workFlowsData.filter(wf => wf.id != id);
@@ -169,12 +169,12 @@ function Page() {
                                                     deleteWorkFlowHandler(wf.id)
                                                 }}>
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M3 6H21M9 6V3H15V6M5 6L6 21H18L19 6M10 10V17M14 10V17" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#E3E5E8"/>
+                                                    <path d="M3 6H21M9 6V3H15V6M5 6L6 21H18L19 6M10 10V17M14 10V17" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" stroke="#E3E5E8"/>
                                                 </svg>
                                             </button>
                                             <button className="flex items-center cursor-pointer">
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M14 5L19 10M4 15L16 3C16.6667 2.33333 17.3333 2.33333 18 3L21 6C21.6667 6.66667 21.6667 7.33333 21 8L9 20L3 21L4 15Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#E3E5E8"/>
+                                                    <path d="M14 5L19 10M4 15L16 3C16.6667 2.33333 17.3333 2.33333 18 3L21 6C21.6667 6.66667 21.6667 7.33333 21 8L9 20L3 21L4 15Z" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" stroke="#E3E5E8"/>
                                                 </svg>
                                             </button>
                                         </td>

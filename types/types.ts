@@ -1,5 +1,6 @@
 // ** React Flow
 import {Edge, Node} from "@xyflow/react";
+import {NodeData} from "@/types/node";
 // ** Work Flow
 export interface WorkFlowProps{
     id: string;
@@ -8,7 +9,7 @@ export interface WorkFlowProps{
     lastRun: string;
     success: number;
     runs: number;
-    nodes?: Node[];
+    nodes?: Node<NodeData>[];
     edges?: Edge[];
 }
 
