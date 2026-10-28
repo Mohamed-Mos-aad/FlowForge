@@ -1,5 +1,5 @@
 // ** Interfaces
-import {WorkFlowProps} from "@/app/types/types";
+import {WorkFlowProps} from "@/types/types";
 // ** Constants
 export const WORKFLOWS:WorkFlowProps[] = [
     {
