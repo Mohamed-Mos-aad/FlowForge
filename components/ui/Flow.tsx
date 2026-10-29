@@ -30,6 +30,7 @@ interface FlowProps {
     setEdges: Dispatch<SetStateAction<Edge[]>>;
     setActiveNode: Dispatch<SetStateAction<Node<NodeData> | null>>;
     setIsPanelOpen: Dispatch<SetStateAction<boolean>>;
+    setLastSteps: Dispatch<SetStateAction<{ nodes: Node<NodeData>[], edges: Edge[] }[]>>
 }
 // ** Components
 import CustomNode from "@/components/workflow/CustomNode";
@@ -45,7 +46,8 @@ export default function Flow({
                                  setNodes,
                                  setEdges,
                                  setActiveNode,
-                                 setIsPanelOpen
+                                 setIsPanelOpen,
+                                 setLastSteps
                              }: FlowProps) {
 
 
@@ -62,14 +64,29 @@ export default function Flow({
     const onEdgesChange = useCallback(
         (changes: EdgeChange[]) => {
             setEdges(eds => applyEdgeChanges(changes, eds));
+            setLastSteps(prev => [
+                ...prev,
+                {
+                    nodes: structuredClone(nodes),
+                    edges: structuredClone(edges),
+                },
+            ]);
         },
-        [setEdges]
+        [nodes, edges, setEdges, setLastSteps]
     );
     const onConnect = useCallback(
         (params: Connection) => {
+            setLastSteps(prev => [
+                ...prev,
+                {
+                    nodes: structuredClone(nodes),
+                    edges: structuredClone(edges),
+                },
+            ]);
+
             setEdges(eds => addEdge(params, eds));
         },
-        [setEdges]
+        [nodes, edges, setEdges, setLastSteps]
     );
     const onNodeClick = useCallback(
         (_event: MouseEvent, node: Node<NodeData>) => {

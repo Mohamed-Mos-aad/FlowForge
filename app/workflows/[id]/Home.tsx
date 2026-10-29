@@ -25,19 +25,20 @@ const initialEdges: Edge[] = [];
 
 export default function Home() {
     // ** States
-    const [isLoaded, setIsLoaded] = useState(false);
+    const [ isLoaded, setIsLoaded ] = useState(false);
+    const [ currentWorkFlowTitle, setCurrentWorkFlowTitle ] = useState("");
     const [ nodes, setNodes] = useState<Node<NodeData>[]>(initialNodes);
     const [ edges, setEdges ] = useState<Edge[]>(initialEdges);
     const [ isPanelOpen, setIsPanelOpen ] = useState(false);
-    const [ activeNode, setActiveNode] = useState<Node<NodeData> | null>(null);
-    const [ executionLogs, setExecutionLogs] = useState<logProps[]>([])
+    const [ activeNode, setActiveNode ] = useState<Node<NodeData> | null>(null);
+    const [ executionLogs, setExecutionLogs ] = useState<logProps[]>([])
+    const [ lastSteps, setLastSteps ] = useState<{nodes: Node<NodeData>[], edges: Edge[]}[]>([]);
 
 
 
     // ** Constants
     const params = useParams<{ id: string }>();
     const workflowId = params.id;
-    const currentWorkFlowTitle = storage.get("flowForgeWorkFlows")?.find((wf: WorkFlowProps) => wf.id === workflowId).title;
 
 
 
@@ -51,49 +52,53 @@ export default function Home() {
         const nextYPosition = lastNode
             ? lastNode.position.y
             : 0;
+        const newNode:Node<NodeData> = {
+            id: nextId,
+            position: { x: nextXPosition, y: nextYPosition},
+            type: "custom",
+            data: {
+                label: `${type} ${nodes.length + 1}`,
+                description: "",
+                status: {
+                    success: true,
+                    ms: 0,
+                },
+                category: type,
+                webhook:{
+                    method: "POST",
+                    url: `https://flowforge-beta.vercel.app/api/webhooks/${workflowId}`
+                },
+                request: {
+                    type: "GET",
+                    url: "",
+                    authentication: "",
+                    headers: {
+                        accept: "application/json",
+                        requestId: "",
+                    },
+                    timeout: 10000,
+                    retries: 0,
+                },
+                errorMsg: "",
+            },
+            className: 'custom-node'
+        };
 
-
-        setNodes(prev => [
+        setLastSteps(prev => [
             ...prev,
             {
-                id: nextId,
-                position: { x: nextXPosition, y: nextYPosition},
-                type: "custom",
-                data: {
-                    label: `${type} ${prev.length + 1}`,
-                    description: "",
-                    status: {
-                        success: true,
-                        ms: 0,
-                    },
-                    category: type,
-                    webhook:{
-                        method: "POST",
-                        url: `https://flowforge-beta.vercel.app/api/webhooks/${workflowId}`
-                    },
-                    request: {
-                        type: "GET",
-                        url: "",
-                        authentication: "",
-                        headers: {
-                            accept: "application/json",
-                            requestId: "",
-                        },
-                        timeout: 10000,
-                        retries: 0,
-                    },
-                    errorMsg: "",
-                },
-                className: 'custom-node'
+                nodes: structuredClone(nodes),
+                edges: structuredClone(edges)
             }
         ]);
 
+        setNodes(prev => [
+            ...prev,
+            newNode
+        ]);
         setIsPanelOpen(false);
     };
-    const updateNodeHandler = (
-        id: string,
-        data: Partial<NodeData>
-    ) => {
+    const updateNodeHandler = (id: string, data: Partial<NodeData>) => {
         setNodes(prev =>
             prev.map(node =>
                 node.id === id
@@ -141,12 +146,18 @@ export default function Home() {
                 ? { ...wf, nodes, edges }
                 : wf
         );
-
         storage.set(
             "flowForgeWorkFlows",
             updatedWorkflows
         );
     }, [workflowId, nodes, edges, isLoaded]);
+    const undoStepHandler = ()=>{
+        if (lastSteps.length === 0) return;
+        const previousStep = lastSteps[lastSteps.length - 1];
+        setNodes(previousStep.nodes);
+        setEdges(previousStep.edges);
+        setLastSteps(prev => prev.slice(0, -1));
+    }
 
 
 
@@ -176,6 +187,7 @@ export default function Home() {
     }, [workflowId]);
     useEffect(() => {
         updateWorkFlowHandler();
+        setCurrentWorkFlowTitle(storage.get("flowForgeWorkFlows")?.find((wf: WorkFlowProps) => wf.id === workflowId).title);
     }, [updateWorkFlowHandler])
 
 
@@ -188,7 +200,9 @@ export default function Home() {
                     Workflows / <span className="text-[#E3E5E8]">{ currentWorkFlowTitle }</span>
                 </h1>
                 <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3 bg-[#17191D]/95 border border-[#2B2E35] rounded-xl p-2 xl:p-0 xl:bg-transparent xl:border-0">
-                    <button className="py-1.75 px-1.25 border border-[#2B2E35] rounded-lg cursor-pointer">
+                    <button
+                        className="py-1.75 px-1.25 border border-[#2B2E35] rounded-lg cursor-pointer"
+                        onClick={undoStepHandler}>
                         <svg width="13" height="7" viewBox="0 0 13 7" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M2.00212 6.31795L1.63812 6.25295C1.37812 5.16095 0.832117 4.06895 0.000117302 2.93795L0.169117 2.19695C0.962117 2.82095 1.53412 3.39295 1.91112 3.89995C2.62612 1.63795 4.73212 -5.10216e-05 7.24112 -5.10216e-05C10.3351 -5.10216e-05 12.8311 2.49595 12.8311 5.58995H11.9081C11.9081 3.00295 9.82812 0.922949 7.24112 0.922949C5.18712 0.922949 3.44512 2.24895 2.82112 4.09495C3.35412 3.80895 4.13412 3.54895 5.09612 3.34095L4.91412 4.06895C3.69212 4.73195 2.71712 5.48595 2.00212 6.31795Z" fill="#9197A2"/>
                         </svg>
@@ -222,7 +236,15 @@ export default function Home() {
                 <div className="flex-1 min-w-0 min-h-0 relative flex flex-col">
                     <h3 className="absolute top-3.5 left-3.5 z-1 text-[10px] text-[#9197A2]">Test Onboarding · {nodes.length} nodes · {edges.length} edges</h3>
                     <div className="flex-1 min-h-0">
-                        <Flow nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} setActiveNode={setActiveNode} setIsPanelOpen={setIsPanelOpen}/>
+                        <Flow
+                            nodes={nodes}
+                            edges={edges}
+                            setNodes={setNodes}
+                            setEdges={setEdges}
+                            setActiveNode={setActiveNode}
+                            setIsPanelOpen={setIsPanelOpen}
+                            setLastSteps={setLastSteps}
+                        />
                     </div>
                     <ExecutionLog logs={executionLogs}/>
                 </div>
