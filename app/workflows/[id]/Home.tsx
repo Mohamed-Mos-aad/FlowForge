@@ -33,6 +33,7 @@ export default function Home() {
     const [ activeNode, setActiveNode ] = useState<Node<NodeData> | null>(null);
     const [ executionLogs, setExecutionLogs ] = useState<logProps[]>([])
     const [ lastSteps, setLastSteps ] = useState<{nodes: Node<NodeData>[], edges: Edge[]}[]>([]);
+    const [ futureSteps, setfutureSteps ] = useState<{nodes: Node<NodeData>[], edges: Edge[]}[]>([]);
 
 
 
@@ -91,7 +92,7 @@ export default function Home() {
                 edges: structuredClone(edges)
             }
         ]);
-
+        setfutureSteps([]);
         setNodes(prev => [
             ...prev,
             newNode
@@ -154,10 +155,39 @@ export default function Home() {
     const undoStepHandler = ()=>{
         if (lastSteps.length === 0) return;
         const previousStep = lastSteps[lastSteps.length - 1];
+
+
         setNodes(previousStep.nodes);
         setEdges(previousStep.edges);
+
+
+        setfutureSteps(prev => [
+            ...prev,
+            {
+                nodes: structuredClone(nodes),
+                edges: structuredClone(edges)
+            }
+        ]);
+
         setLastSteps(prev => prev.slice(0, -1));
     }
+    const redoHandler = ()=>{
+        if (futureSteps.length === 0) return;
+        const nextStep = futureSteps[futureSteps.length - 1];
+
+        setNodes(nextStep.nodes);
+        setEdges(nextStep.edges);
+
+        setLastSteps(prev => [
+            ...prev,
+            {
+                nodes: structuredClone(nodes),
+                edges: structuredClone(edges),
+            },
+        ]);
+
+        setfutureSteps(prev => prev.slice(0, -1));
+    };
 
 
 
@@ -208,7 +238,9 @@ export default function Home() {
                         </svg>
                     </button>
 
-                    <button className="py-1.75 px-1.25 border border-[#2B2E35] rounded-lg cursor-pointer">
+                    <button
+                        className="py-1.75 px-1.25 border border-[#2B2E35] rounded-lg cursor-pointer"
+                        onClick={redoHandler}>
                         <svg width="13" height="7" viewBox="0 0 13 7" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M0.000117302 5.58995C0.000117302 2.49595 2.49612 -5.10216e-05 5.59012 -5.10216e-05C8.09912 -5.10216e-05 10.2051 1.63795 10.9201 3.89995C11.2971 3.39295 11.8691 2.82095 12.6621 2.19695L12.8311 2.93795C11.9991 4.06895 11.4531 5.16095 11.1931 6.25295L10.8291 6.31795C10.1141 5.48595 9.13912 4.73195 7.91712 4.06895L7.73512 3.34095C8.69712 3.54895 9.47712 3.80895 10.0101 4.09495C9.38612 2.24895 7.64412 0.922949 5.59012 0.922949C3.00312 0.922949 0.923117 3.00295 0.923117 5.58995H0.000117302Z" fill="#9197A2"/>
                         </svg>
