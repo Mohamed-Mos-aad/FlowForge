@@ -1,25 +1,39 @@
-# FlowForge — Visual Workflow Builder
+# FlowForge
 
-FlowForge is a visual workflow builder in progress. It is being developed as a focused front-end project around the core experience of creating and editing node-based workflows.
+FlowForge is a front-end portfolio project exploring a visual workflow automation experience. Users can create workflows, arrange connected nodes on a canvas, configure steps, and save their work in the browser. The project is being built with a front-end-first approach, with backend capabilities planned as a later stage.
 
-The current prototype provides an interactive canvas where you can add, move, select, and connect nodes. The longer-term goal is to grow it into a workflow automation product with validation, execution, and run inspection.
+The product vision is to let users describe an automation as a connected flow: receive an event, inspect or transform its data, branch on a condition, and understand what happened at each step. The intended experience brings together a visual editor, node settings, workflow validation, and an execution inspector.
 
-## Current prototype
+## Features in the current prototype
 
-- Interactive workflow canvas built with React Flow (`@xyflow/react`).
-- Add nodes from the side panel on desktop or the floating action button on mobile.
-- Drag nodes around the canvas and create connections between nodes.
-- Select a node to open its inspector panel.
-- Responsive editor layout with canvas controls and a dotted background.
-- A newly added node is connected to the previously added node.
+- **Workflow dashboard:** create workflows, view workflow counts and status filters, and delete workflows.
+- **Visual editor:** build a node graph with React Flow. Add Webhook, HTTP, Condition, and Action nodes; move and connect nodes; and select nodes to edit their settings.
+- **Node configuration:** edit labels and descriptions, configure webhook details and HTTP requests, define conditions, and set up email action templates.
+- **Step-level testing:** test an HTTP request, evaluate a condition, or preview email values against input from a connected node. Results appear in the execution log.
+- **Template helpers:** use expressions such as `{{name}}` and `{{customer.email}}` to read values from input data.
+- **Responsive interface:** navigate and edit workflows on desktop and mobile layouts.
+- **Local persistence:** workflow details, nodes, and connections are saved in the browser's `localStorage` under `flowForgeWorkFlows`.
 
-This is an early UI prototype. Workflow persistence, configurable node properties, validation, workflow execution, authentication, and execution history are planned and are not implemented yet.
+## Prototype limitations
+
+This is currently a front-end prototype, and workflow data is local to the current browser. There is no server-side database, account system, or cross-device synchronization. Step-level test buttons do not run the entire workflow: email actions validate and preview messages but do not send email, and webhook listening is not connected to a live event service. The dashboard's Import workflow control and several editor controls are visual placeholders. Workflow publishing, scheduling, full workflow validation and execution, and persistent execution history are not implemented.
+
+## Product roadmap
+
+The following items describe the intended direction and are not implemented features:
+
+1. **Editor polish:** deletion, minimap, keyboard shortcuts, and undo/redo.
+2. **Workflow validation:** flag missing configuration, invalid connections, and incomplete paths before a run.
+3. **Execution engine:** implement a limited, UI-independent runner that passes data between nodes, supports condition branches, reports step states, and handles errors.
+4. **Execution inspection:** show each step's input, output, status, error, and duration, with a history of runs.
+5. **Backend stage:** when backend development is in scope, add server-side workflow persistence, accounts, and selected integrations. The backend stack has not been selected.
+
+The initial node types are Webhook, HTTP Request, Condition, and Action. The project prioritizes a focused, reliable workflow experience over a large catalog of integrations.
 
 ## Tech stack
 
 - [Next.js](https://nextjs.org/) 16 with the App Router
-- [React](https://react.dev/) 19
-- [TypeScript](https://www.typescriptlang.org/)
+- [React](https://react.dev/) 19 and [TypeScript](https://www.typescriptlang.org/)
 - [React Flow](https://reactflow.dev/) (`@xyflow/react`)
 - [Tailwind CSS](https://tailwindcss.com/) 4
 - [Lucide](https://lucide.dev/) icons
@@ -37,13 +51,13 @@ This is an early UI prototype. Workflow persistence, configurable node propertie
 npm install
 ```
 
-### Run the development server
+### Start the development server
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000/workflows](http://localhost:3000/workflows) to view the workflow editor.
+Open [http://localhost:3000/workflows](http://localhost:3000/workflows) to view the dashboard. Select **New workflow** to open the editor.
 
 ## Available scripts
 
@@ -58,26 +72,18 @@ Open [http://localhost:3000/workflows](http://localhost:3000/workflows) to view 
 
 ```text
 app/
-  workflows/       Workflow editor route and canvas styles
-  page.tsx         Home route
+  workflows/             Workflow dashboard and editor routes
 components/
-  ui/Flow.tsx      React Flow canvas and interaction handlers
-  navigation/      Navigation components
+  forms/                  Webhook, HTTP, condition, and action settings
+  navigation/             Main navigation
+  ui/                     React Flow canvas
+  workflow/               Custom nodes and execution log
+data/                     Sample data
+lib/                      Browser storage and condition/template helpers
+style/                    React Flow styling
+types/                    Workflow and node TypeScript types
 ```
 
-## Product direction
+## Development direction
 
-The project is intended to develop toward a compact workflow automation tool. The following are goals, not current features:
-
-1. **Workflow editor:** custom node types, richer editing controls, save and load, and undo/redo.
-2. **Node configuration:** typed settings and validation tailored to each node type.
-3. **Workflow validation:** detect incomplete or invalid workflows before a run.
-4. **Execution engine:** execute a supported set of node types, pass data between steps, and report success or failure.
-5. **Execution inspector and history:** inspect step inputs, outputs, errors, and durations, and review previous runs.
-6. **Persistence and product experience:** save workflows and provide the surrounding project experience.
-
-The planned direction is to keep workflow rules and execution logic independent from the canvas UI as those capabilities are added.
-
-## Status
-
-FlowForge is under active development. The README describes the current prototype separately from the product direction so planned capabilities are not mistaken for implemented features.
+Keep workflow rules and execution logic independent from the canvas UI as the project grows. For a portfolio presentation, document the implementation decisions, show a realistic workflow demo, and report tests or performance measurements only after they have been run. See the roadmap above for planned capabilities.
