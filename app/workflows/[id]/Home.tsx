@@ -165,9 +165,9 @@ export default function Home() {
             ...prev,
             {
                 nodes: structuredClone(nodes),
-                edges: structuredClone(edges)
-            }
-        ]);
+                edges: structuredClone(edges),
+            },
+        ].slice(-50));
 
         setLastSteps(prev => prev.slice(0, -1));
     }
@@ -175,16 +175,16 @@ export default function Home() {
         if (futureSteps.length === 0) return;
         const nextStep = futureSteps[futureSteps.length - 1];
 
-        setNodes(nextStep.nodes);
-        setEdges(nextStep.edges);
-
         setLastSteps(prev => [
             ...prev,
             {
                 nodes: structuredClone(nodes),
                 edges: structuredClone(edges),
             },
-        ]);
+        ].slice(-50));
+
+        setNodes(nextStep.nodes);
+        setEdges(nextStep.edges);
 
         setfutureSteps(prev => prev.slice(0, -1));
     };
