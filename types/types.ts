@@ -6,7 +6,7 @@ export interface WorkFlowProps{
     id: string;
     title: string;
     status: 'Active' | 'Failing' | 'Draft';
-    lastRun: string;
+    lastRun: number;
     success: number;
     runs: number;
     nodes?: Node<NodeData>[];

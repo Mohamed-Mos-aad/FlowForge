@@ -6,6 +6,7 @@ import {useEffect, useState} from "react";
 import {WorkFlowProps} from "@/types/types";
 // ** Lib
 import {storage} from "@/lib/storage";
+import {getTimeAgo} from "@/lib/time";
 
 
 
@@ -158,7 +159,7 @@ function Page() {
                                     <tr className="cursor-pointer" key={wf.id} onClick={()=>{openWorkFlowHandler(wf.id)}}>
                                         <td className="px-3 py-2.25 whitespace-nowrap">{wf.title}</td>
                                         <td className={`px-3 py-2.25 whitespace-nowrap ${wf.status === "Active" ? 'text-[#6BC18F]' : wf.status === "Failing" ? 'text-[#EF7B63]' : 'text-[#9197A2]'}`}>● {wf.status}</td>
-                                        <td className="px-3 py-2.25 whitespace-nowrap">{wf.lastRun}m ago</td>
+                                        <td className="px-3 py-2.25 whitespace-nowrap">{getTimeAgo(wf.lastRun)}m ago</td>
                                         <td className="px-3 py-2.25 whitespace-nowrap">{wf.success}%</td>
                                         <td className="px-3 py-2.25 whitespace-nowrap">{wf.runs}</td>
                                         <td className="px-3 py-2.25 flex items-center gap-4">

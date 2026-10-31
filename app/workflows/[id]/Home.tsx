@@ -208,7 +208,32 @@ export default function Home() {
             updatedWorkflows
         );
         setCurrentWorkFlow(storage.get("flowForgeWorkFlows")?.find((wf: WorkFlowProps) => wf.id === workflowId) ?? {});
-    }, [workflowId, nodes, edges, isLoaded]);
+    }, [workflowId, isLoaded]);
+    const testWorkFlowHandler = ()=>{
+        updateRunsDetailsHandler()
+    }
+    const updateRunsDetailsHandler = useCallback(() => {
+        if (!isLoaded) return;
+
+        const storedWorkflows = storage.get("flowForgeWorkFlows");
+
+        const workflows: WorkFlowProps[] = Array.isArray(storedWorkflows)
+            ? storedWorkflows
+            : [];
+
+
+        const updatedWorkflows = workflows.map((wf) =>
+            wf.id === workflowId
+                ? { ...wf, runs: wf.runs + 1, lastRun: Date.now() }
+                : wf
+        );
+        storage.set(
+            "flowForgeWorkFlows",
+            updatedWorkflows
+        );
+        setCurrentWorkFlow(storage.get("flowForgeWorkFlows")?.find((wf: WorkFlowProps) => wf.id === workflowId) ?? {});
+    }, [workflowId, isLoaded]);
+
 
 
 
@@ -271,12 +296,14 @@ export default function Home() {
                         v14 · History
                     </h2>
 
-                    <button className="flex items-center gap-1 py-1.75 px-2 sm:px-3 border border-[#2B2E35] text-[12px] sm:text-[13px] text-[#E3E5E8] rounded-lg cursor-pointer whitespace-nowrap">
-                        <svg width="11" height="12" viewBox="0 0 11 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M0 11.8182V-1.19209e-05L10.0455 5.90908L0 11.8182Z" fill="#E3E5E8"/>
-                        </svg>
-                        Test
-                        <span className="hidden sm:inline">workflow</span>
+                    <button
+                        className="flex items-center gap-1 py-1.75 px-2 sm:px-3 border border-[#2B2E35] text-[12px] sm:text-[13px] text-[#E3E5E8] rounded-lg cursor-pointer whitespace-nowrap"
+                        onClick={testWorkFlowHandler}>
+                            <svg width="11" height="12" viewBox="0 0 11 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M0 11.8182V-1.19209e-05L10.0455 5.90908L0 11.8182Z" fill="#E3E5E8"/>
+                            </svg>
+                            Test
+                            <span className="hidden sm:inline">workflow</span>
                     </button>
 
                     <button
