@@ -17,6 +17,8 @@ import {NodeData} from "@/types/node";
 import {logProps, WorkFlowProps} from "@/types/types";
 // ** Lib
 import {storage} from "@/lib/storage";
+// ** Utils
+import {exportWorkflowFile} from "@/utils/workflow";
 // ** Constants
 const initialNodes: Node<NodeData>[] = [];
 const initialEdges: Edge[] = [];
@@ -54,7 +56,7 @@ export default function Home() {
             ? lastNode.position.y
             : 0;
         const newNode:Node<NodeData> = {
-            id: nextId,
+            id: crypto.randomUUID(),
             position: { x: nextXPosition, y: nextYPosition},
             type: "custom",
             data: {
@@ -263,7 +265,15 @@ export default function Home() {
             updatedWorkflows
         );
     }, [workflowId, currentWorkFlow?.nodes, isLoaded]);
+    const exportWorkFlowHandler = () => {
+        if (!currentWorkFlow) return;
 
+        exportWorkflowFile({
+            ...currentWorkFlow,
+            nodes,
+            edges,
+        });
+    };
 
 
 
@@ -331,7 +341,12 @@ export default function Home() {
                             Test
                             <span className="hidden sm:inline">workflow</span>
                     </button>
-
+                    <button
+                        className="py-1.75 px-3 border border-[#2B2E35] text-[12px] sm:text-[13px] text-[#E3E5E8] rounded-lg cursor-pointer"
+                        onClick={exportWorkFlowHandler}
+                    >
+                        Export
+                    </button>
                     <button
                         className={`${currentWorkFlow?.status === 'Active' ? 'border-[#2B2E35] text-[#E3E5E8]' : 'bg-[#C7F568] border-[#C7F568] text-[#0F1113]'} py-1.75 px-3 sm:px-4 border rounded-lg text-[12px] sm:text-[13px] font-semibold cursor-pointer`}
                         onClick={publishToggleHandler}>

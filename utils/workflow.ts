@@ -1,8 +1,50 @@
-
+// ** React Flow
 import type { Node, Edge } from "@xyflow/react";
+// ** Types
 import type { NodeData } from "@/types/node";
 import type { WorkFlowProps } from "@/types/types";
 
+
+// ** Export WorkFlow
+export function exportWorkflowFile(workflow: WorkFlowProps) {
+    const exportData = {
+        type: "flowforge-workflow",
+        version: 1,
+        exportedAt: Date.now(),
+        workflow: {
+            id: workflow.id,
+            title: workflow.title,
+            status: workflow.status,
+            lastRun: workflow.lastRun,
+            success: workflow.success,
+            runs: workflow.runs,
+            nodes: workflow.nodes ?? [],
+            edges: workflow.edges ?? [],
+        },
+    };
+
+    const blob = new Blob(
+        [JSON.stringify(exportData, null, 2)],
+        { type: "application/json" }
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${workflow.title.replace(/[^a-z0-9-_]/gi, "_")}.json`;
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
+}
+
+
+
+
+// ** Import WorkFlow
 export async function importWorkflowFile(
     file: File
 ): Promise<WorkFlowProps> {
