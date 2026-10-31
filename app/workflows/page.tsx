@@ -7,6 +7,8 @@ import {WorkFlowProps} from "@/types/types";
 // ** Lib
 import {storage} from "@/lib/storage";
 import {getTimeAgo} from "@/lib/time";
+// ** Utils
+import {importWorkflowFile} from "@/utils/workflow";
 
 
 
@@ -68,6 +70,60 @@ function Page() {
             setDisplayedData(filteredData)
         }
     }
+    const importWorkFlowHandler = async (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        const input = event.currentTarget;
+        const file = input.files?.[0];
+
+        if (!file) return;
+
+        try {
+            if (!file.name.toLowerCase().endsWith(".json")) {
+                throw new Error("Please select a JSON file");
+            }
+
+            // Import and validate
+            const newWorkflow = await importWorkflowFile(file);
+
+            // Get current workflows
+            const storedWorkflows = storage.get("flowForgeWorkFlows");
+
+            const workflows: WorkFlowProps[] = Array.isArray(storedWorkflows)
+                ? storedWorkflows
+                : [];
+
+            // Add imported workflow
+            const updatedWorkflows = [
+                ...workflows,
+                newWorkflow
+            ];
+
+            // Save to storage
+            storage.set("flowForgeWorkFlows", updatedWorkflows);
+
+            // Update React state
+            setWorkFlowsData(updatedWorkflows);
+            setFilter("All");
+            setDisplayedData(updatedWorkflows);
+
+            // Open imported workflow
+            router.push(`/workflows/${newWorkflow.id}`);
+
+        } catch (error) {
+            console.error(error);
+
+            alert(
+                error instanceof Error
+                    ? error.message
+                    : "Failed to import workflow"
+            );
+        } finally {
+            input.value = "";
+        }
+    };
+
+
 
 
 
@@ -89,9 +145,18 @@ function Page() {
                     <p className="text-[13px] text-[#9197A2]">Automations running in this workspace, with their latest execution health.</p>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                    <button className="bg-[#17191D] py-1.75 px-3 sm:px-3 border border-[#2B2E35] text-[12px] sm:text-[13px] text-[#E3E5E8] rounded-lg cursor-pointer whitespace-nowrap">
-                        Import workflow
-                    </button>
+                    <label
+                        htmlFor="importWorkFlow"
+                        className="bg-[#17191D] py-1.75 px-3 sm:px-3 border border-[#2B2E35] text-[12px] sm:text-[13px] text-[#E3E5E8] rounded-lg cursor-pointer whitespace-nowrap">
+                            Import workflow
+                        <input
+                            type="file"
+                            name=""
+                            accept=".json,application/json"
+                            onChange={importWorkFlowHandler}
+                            id="importWorkFlow"
+                            className="hidden" />
+                    </label>
                     <button
                         className="bg-[#C7F568] py-1.75 px-3 sm:px-4 border border-[#C7F568] rounded-lg text-[12px] sm:text-[13px] font-semibold text-[#0F1113] cursor-pointer whitespace-nowrap"
                         onClick={newWorkFlowHandler}>
