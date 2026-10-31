@@ -211,6 +211,7 @@ export default function Home() {
     }, [workflowId, isLoaded]);
     const testWorkFlowHandler = ()=>{
         updateRunsDetailsHandler()
+        updateWorkFlowSuccessHandler();
     }
     const updateRunsDetailsHandler = useCallback(() => {
         if (!isLoaded) return;
@@ -233,6 +234,35 @@ export default function Home() {
         );
         setCurrentWorkFlow(storage.get("flowForgeWorkFlows")?.find((wf: WorkFlowProps) => wf.id === workflowId) ?? {});
     }, [workflowId, isLoaded]);
+    const updateWorkFlowSuccessHandler = useCallback(() => {
+        if (!isLoaded) return;
+
+        const storedWorkflows = storage.get("flowForgeWorkFlows");
+
+        const workflows: WorkFlowProps[] = Array.isArray(storedWorkflows)
+            ? storedWorkflows
+            : [];
+
+
+        const totalNodes = currentWorkFlow?.nodes?.length ?? 0;
+        const successRate = currentWorkFlow?.nodes?.filter(
+            nd => nd.data.status?.success === true
+        ).length ?? 0
+
+        const successPercentage = totalNodes > 0
+            ? Math.round((successRate / totalNodes) * 100)
+            : 0;
+
+        const updatedWorkflows = workflows.map((wf) =>
+            wf.id === workflowId
+                ? { ...wf, success: successPercentage }
+                : wf
+        );
+        storage.set(
+            "flowForgeWorkFlows",
+            updatedWorkflows
+        );
+    }, [workflowId, currentWorkFlow?.nodes, isLoaded]);
 
 
 
@@ -291,10 +321,6 @@ export default function Home() {
                             <path d="M0.000117302 5.58995C0.000117302 2.49595 2.49612 -5.10216e-05 5.59012 -5.10216e-05C8.09912 -5.10216e-05 10.2051 1.63795 10.9201 3.89995C11.2971 3.39295 11.8691 2.82095 12.6621 2.19695L12.8311 2.93795C11.9991 4.06895 11.4531 5.16095 11.1931 6.25295L10.8291 6.31795C10.1141 5.48595 9.13912 4.73195 7.91712 4.06895L7.73512 3.34095C8.69712 3.54895 9.47712 3.80895 10.0101 4.09495C9.38612 2.24895 7.64412 0.922949 5.59012 0.922949C3.00312 0.922949 0.923117 3.00295 0.923117 5.58995H0.000117302Z" fill="#9197A2"/>
                         </svg>
                     </button>
-
-                    <h2 className="hidden xl:block text-[11px] text-[#9197A2]">
-                        v14 · History
-                    </h2>
 
                     <button
                         className="flex items-center gap-1 py-1.75 px-2 sm:px-3 border border-[#2B2E35] text-[12px] sm:text-[13px] text-[#E3E5E8] rounded-lg cursor-pointer whitespace-nowrap"

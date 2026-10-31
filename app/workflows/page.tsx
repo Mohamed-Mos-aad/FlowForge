@@ -38,7 +38,7 @@ function Page() {
             id: newId,
             title: `new workflow ${workFlowsData.length > 0 ? workFlowsData.length : '' }`,
             status: 'Draft',
-            lastRun: '',
+            lastRun: 0,
             success: 0,
             runs: 0
         }
