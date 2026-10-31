@@ -36,7 +36,7 @@ function Page() {
         const newWorkFlow:WorkFlowProps = {
             id: newId,
             title: `new workflow ${workFlowsData.length > 0 ? workFlowsData.length : '' }`,
-            status: 'Active',
+            status: 'Draft',
             lastRun: '',
             success: 0,
             runs: 0

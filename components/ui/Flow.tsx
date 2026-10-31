@@ -10,7 +10,7 @@ import {
     Controls,
     applyNodeChanges,
     applyEdgeChanges,
-    addEdge,
+    addEdge
 } from '@xyflow/react';
 import type {
     Node,
@@ -64,15 +64,8 @@ export default function Flow({
     const onEdgesChange = useCallback(
         (changes: EdgeChange[]) => {
             setEdges(eds => applyEdgeChanges(changes, eds));
-            setLastSteps(prev => [
-                ...prev,
-                {
-                    nodes: structuredClone(nodes),
-                    edges: structuredClone(edges),
-                },
-            ]);
         },
-        [nodes, edges, setEdges, setLastSteps]
+        [setEdges]
     );
     const onConnect = useCallback(
         (params: Connection) => {

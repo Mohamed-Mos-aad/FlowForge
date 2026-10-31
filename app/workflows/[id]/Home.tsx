@@ -26,7 +26,7 @@ const initialEdges: Edge[] = [];
 export default function Home() {
     // ** States
     const [ isLoaded, setIsLoaded ] = useState(false);
-    const [ currentWorkFlowTitle, setCurrentWorkFlowTitle ] = useState("");
+    const [ currentWorkFlow, setCurrentWorkFlow ] = useState<WorkFlowProps>();
     const [ nodes, setNodes] = useState<Node<NodeData>[]>(initialNodes);
     const [ edges, setEdges ] = useState<Edge[]>(initialEdges);
     const [ isPanelOpen, setIsPanelOpen ] = useState(false);
@@ -188,6 +188,27 @@ export default function Home() {
 
         setfutureSteps(prev => prev.slice(0, -1));
     };
+    const publishToggleHandler = useCallback(() => {
+        if (!isLoaded) return;
+
+        const storedWorkflows = storage.get("flowForgeWorkFlows");
+
+        const workflows: WorkFlowProps[] = Array.isArray(storedWorkflows)
+            ? storedWorkflows
+            : [];
+
+
+        const updatedWorkflows = workflows.map((wf) =>
+            wf.id === workflowId
+                ? { ...wf, status: wf.status === 'Active' ? 'Draft' : 'Active' }
+                : wf
+        );
+        storage.set(
+            "flowForgeWorkFlows",
+            updatedWorkflows
+        );
+        setCurrentWorkFlow(storage.get("flowForgeWorkFlows")?.find((wf: WorkFlowProps) => wf.id === workflowId) ?? {});
+    }, [workflowId, nodes, edges, isLoaded]);
 
 
 
@@ -217,7 +238,7 @@ export default function Home() {
     }, [workflowId]);
     useEffect(() => {
         updateWorkFlowHandler();
-        setCurrentWorkFlowTitle(storage.get("flowForgeWorkFlows")?.find((wf: WorkFlowProps) => wf.id === workflowId).title);
+        setCurrentWorkFlow(storage.get("flowForgeWorkFlows")?.find((wf: WorkFlowProps) => wf.id === workflowId) ?? {});
     }, [updateWorkFlowHandler])
 
 
@@ -227,7 +248,7 @@ export default function Home() {
             <header className="absolute xl:relative top-3 left-3 right-3 xl:top-auto xl:left-auto xl:right-auto z-30 flex justify-end xl:justify-between items-center bg-transparent xl:bg-[#17191D] border-0 xl:border-b xl:border-[#2B2E35] px-0 xl:px-3.5 py-0 xl:py-2 shrink-0">
 
                 <h1 className="hidden xl:block text-xs sm:text-sm text-[#9197A2] min-w-0">
-                    Workflows / <span className="text-[#E3E5E8]">{ currentWorkFlowTitle }</span>
+                    Workflows / <span className="text-[#E3E5E8]">{ currentWorkFlow?.title }</span>
                 </h1>
                 <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3 bg-[#17191D]/95 border border-[#2B2E35] rounded-xl p-2 xl:p-0 xl:bg-transparent xl:border-0">
                     <button
@@ -258,8 +279,10 @@ export default function Home() {
                         <span className="hidden sm:inline">workflow</span>
                     </button>
 
-                    <button className="bg-[#C7F568] py-1.75 px-3 sm:px-4 border border-[#C7F568] rounded-lg text-[12px] sm:text-[13px] font-semibold text-[#0F1113] cursor-pointer">
-                        Publish
+                    <button
+                        className={`${currentWorkFlow?.status === 'Active' ? 'border-[#2B2E35] text-[#E3E5E8]' : 'bg-[#C7F568] border-[#C7F568] text-[#0F1113]'} py-1.75 px-3 sm:px-4 border rounded-lg text-[12px] sm:text-[13px] font-semibold cursor-pointer`}
+                        onClick={publishToggleHandler}>
+                        {currentWorkFlow?.status === 'Draft' ? 'Publish' : 'Draft'}
                     </button>
                 </div>
             </header>
