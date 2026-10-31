@@ -78,27 +78,6 @@ export default function NavBar() {
                     <li onClick={()=>activePageHandler("Workflows")}>
                         <Link href="/workflows" className={`w-full flex p-2 border-l-2 cursor-pointer ${activePage === 'Workflows' ? 'bg-[#1D2025] border-[#C7F568]' : 'border-transparent'}`}>Workflows</Link>
                     </li>
-                    <li onClick={()=>activePageHandler("Templates")}>
-                        <Link href="/workflows" className={`w-full flex p-2 border-l-2 cursor-pointer ${activePage === 'Templates' ? 'bg-[#1D2025] border-[#C7F568]' : 'border-transparent'}`}>Templates</Link>
-                    </li>
-                    <li onClick={()=>activePageHandler("Connections")}>
-                        <Link href="/workflows" className={`w-full flex p-2 border-l-2 cursor-pointer ${activePage === 'Connections' ? 'bg-[#1D2025] border-[#C7F568]' : 'border-transparent'}`}>Connections</Link>
-                    </li>
-                    <li onClick={()=>activePageHandler("OPERATE")}>
-                        <Link href="/workflows" className={`w-full flex p-2 border-l-2 cursor-pointer ${activePage === 'OPERATE' ? 'bg-[#1D2025] border-[#C7F568]' : 'border-transparent'}`}>OPERATE</Link>
-                    </li>
-                    <li onClick={()=>activePageHandler("Overview")}>
-                        <Link href="/workflows" className={`w-full flex p-2 border-l-2 cursor-pointer ${activePage === 'Overview' ? 'bg-[#1D2025] border-[#C7F568]' : 'border-transparent'}`}>Overview</Link>
-                    </li>
-                    <li onClick={()=>activePageHandler("Executions")}>
-                        <Link href="/workflows" className={`w-full flex p-2 border-l-2 cursor-pointer ${activePage === 'Executions' ? 'bg-[#1D2025] border-[#C7F568]' : 'border-transparent'}`}>Executions</Link>
-                    </li>
-                    <li onClick={()=>activePageHandler("Activity")}>
-                        <Link href="/workflows" className={`w-full flex p-2 border-l-2 cursor-pointer ${activePage === 'Activity' ? 'bg-[#1D2025] border-[#C7F568]' : 'border-transparent'}`}>Activity</Link>
-                    </li>
-                    <li onClick={()=>activePageHandler("Settings")}>
-                        <Link href="/workflows" className={`w-full flex p-2 border-l-2 cursor-pointer ${activePage === 'Settings' ? 'bg-[#1D2025] border-[#C7F568]' : 'border-transparent'}`}>Settings</Link>
-                    </li>
                 </ul>
             </nav>
         </>
